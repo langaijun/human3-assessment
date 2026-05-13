@@ -36,6 +36,16 @@ export interface VersionFeatures {
   recommended?: boolean;
 }
 
+/**
+ * 版本切换配置接口
+ */
+export interface VersionSwitchConfig {
+  targetVersion: AppVersion;
+  requiresPayment: boolean;
+  requiresConfirmation: boolean;
+  confirmationMessage: string;
+}
+
 export const DEFAULT_VERSION_STATE: VersionState = {
   selectedVersion: 'simple',
   isPaid: false,
