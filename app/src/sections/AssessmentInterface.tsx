@@ -1,12 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Loader2, User, Bot } from 'lucide-react';
-import { useDeepSeekChat } from '@/hooks/useDeepSeekChat';
+import { Send, Loader2, User, Bot, Lock } from 'lucide-react';
+import { useVersionChat } from '@/hooks/useVersionChat';
 import type { AssessmentResult } from '@/types';
-
-interface AssessmentInterfaceProps {
-  initialInput: string;
-  onComplete: (result: AssessmentResult) => void;
-}
 
 const BG = '#FDF6E3';
 const BORDER = '#E8DCC8';
@@ -40,7 +35,7 @@ function AIMessage({ content }: { content: string }) {
     <div className="py-4 animate-fade-in" style={{ borderBottom: `1px solid ${BORDER}` }}>
       <div className="flex items-center gap-2 mb-2">
         <Bot className="w-4 h-4" style={{ color: TEXT_MUTED }} />
-        <span className="text-xs" style={{ color: TEXT_MUTED }}>HUMAN 3.0</span>
+        <span className="text-xs" style={{ color: TEXT }}>HUMAN 3.0</span>
       </div>
       <div
         className="text-sm leading-[1.8]"
@@ -57,8 +52,8 @@ function UserMessage({ content }: { content: string }) {
     <div className="py-4 flex justify-end animate-fade-in" style={{ borderBottom: `1px solid ${BORDER}` }}>
       <div className="max-w-[85%]">
         <div className="flex items-center gap-2 mb-2 justify-end">
-          <span className="text-xs" style={{ color: TEXT_MUTED }}>你</span>
-          <User className="w-4 h-4" style={{ color: TEXT_MUTED }} />
+          <span className="text-xs" style={{ color: TEXT }}>你</span>
+          <User className="w-4 h-4" style={{ color: TEXT }} />
         </div>
         <p className="text-sm leading-[1.8] text-right" style={{ color: TEXT }}>
           {content}
@@ -68,8 +63,23 @@ function UserMessage({ content }: { content: string }) {
   );
 }
 
+interface AssessmentInterfaceProps {
+  initialInput: string;
+  onComplete: (result: AssessmentResult) => void;
+}
+
 export default function AssessmentInterface({ initialInput, onComplete }: AssessmentInterfaceProps) {
-  const { messages, isLoading, isComplete, result, sendMessage } = useDeepSeekChat();
+  const {
+    messages,
+    isLoading,
+    isComplete,
+    result,
+    sendMessage,
+    handleStartAssessment,
+    handleChatComplete,
+    isPaid
+  } = useVersionChat();
+
   const [inputValue, setInputValue] = useState('');
   const [hasStarted, setHasStarted] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -88,14 +98,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [messages, isLoading]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
-  const progress = Math.min((assistantCount / 12) * 100, 100);
-
-  useEffect(() => {
-    if (isComplete && result) {
-      const timer = setTimeout(() => onComplete(result), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isComplete, result, onComplete]);
+  const progress = Math.min((assistantCount / (isPaid ? 20 : 12)) * 100, 100);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -112,11 +115,13 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     }
   }, [handleSubmit]);
 
+  const maxRounds = isPaid ? 20 : 12;
+
   return (
-    <div className="fixed inset-0 z-40 flex flex-col" style={{ background: BG }}>
+    <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
       {/* Progress bar */}
-      <div className="h-[2px]" style={{ background: '#E8DCC8' }}>
-        <div className="h-full transition-all duration-500 ease-out" style={{ width: `${progress}%`, background: '#A89878' }} />
+      <div className="h-[2px]" style={{ background: '#A89878' }}>
+        <div className="h-full transition-all duration-500 ease-out" style={{ width: `${progress}%`, background: '#4CAF50' }} />
       </div>
 
       {/* Header */}
@@ -126,63 +131,83 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
           <div>
-            <span className="text-sm font-medium" style={{ color: TEXT }}>HUMAN 3.0 测评</span>
-            <span className="text-xs ml-2" style={{ color: TEXT_MUTED }}>{assistantCount}/12 轮</span>
+            <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
+            {isPaid && (
+              <span className="ml-2 px-2 py-0.5 rounded-full text-xs" style={{ background: '#FF9800', color: '#FFFFFF' }}>
+                完整版
+              </span>
+            )}
           </div>
         </div>
-        {isLoading && <Loader2 className="w-4 h-4 animate-spin" style={{ color: TEXT_MUTED }} />}
+
+        <div className="flex items-center gap-2">
+          <div className="text-xs" style={{ color: TEXT_MUTED }}>
+            {assistantCount}/{maxRounds} 轮对话
+          </div>
+        </div>
       </div>
 
-      {/* Chat messages - A4 paper style */}
+      {/* Chat messages */}
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-6 py-4">
-          {messages.map((msg) => {
-            if (msg.role === 'user') {
-              return <UserMessage key={msg.id} content={msg.content} />;
-            }
-            return <AIMessage key={msg.id} content={msg.content} />;
-          })}
+        {messages.map((msg) => {
+          if (msg.role === 'user') {
+            return <UserMessage key={msg.id} content={msg.content} />;
+          }
+          return <AIMessage key={msg.id} content={msg.content} />;
+        })}
 
-          {isLoading && messages[messages.length - 1]?.role === 'user' && <TypingIndicator />}
+        {isLoading && <TypingIndicator />}
 
-          {isComplete && (
-            <div className="flex items-center justify-center py-8">
-              <div className="flex items-center gap-2 text-sm" style={{ color: TEXT_MUTED }}>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>正在生成你的评估报告...</span>
-              </div>
-            </div>
-          )}
-        </div>
+        {!isLoading && !isComplete && messages.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-sm" style={{ color: TEXT_MUTED }}>
+              开始你的测评之旅...
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Input area - 2+ lines textarea */}
-      <div className="px-4 py-4" style={{ borderTop: `1px solid ${BORDER}`, background: BG }}>
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-          <div
-            className="flex items-end gap-3 rounded-xl p-3"
-            style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}
-          >
-            <textarea
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="输入你的回答...（按 Enter 发送，Shift+Enter 换行）"
-              rows={2}
-              disabled={isLoading || isComplete}
-              className="flex-1 bg-transparent text-sm outline-none resize-none leading-relaxed disabled:opacity-50"
-              style={{ color: TEXT }}
-            />
-            <button
-              type="submit"
-              disabled={!inputValue.trim() || isLoading || isComplete}
-              className="w-10 h-10 flex items-center justify-center rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
-              style={{ background: '#8C7E6A', color: '#FFFFFF' }}
-            >
-              <Send className="w-4 h-4" />
-            </button>
+      {/* Complete state */}
+      {isComplete && result && (
+        <div className="text-center py-8">
+          <div className="flex items-center justify-center gap-2">
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: TEXT_MUTED }} />
+            <p className="text-sm" style={{ color: TEXT }}>
+              正在生成你的评估报告...
+            </p>
           </div>
-        </form>
+        </div>
+      )}
+
+      {/* Input area */}
+      <div className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}`, background: BG }}>
+        <div className="max-w-3xl mx-auto">
+          <form onSubmit={handleSubmit}>
+            <div
+              className="flex items-end gap-3 rounded-xl p-3"
+              style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}
+            >
+              <textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="输入你的回答...（按 Enter 发送，Shift+Enter 换行）"
+                rows={2}
+                disabled={isLoading || isComplete}
+                className="flex-1 bg-transparent text-sm outline-none resize-none leading-relaxed disabled:opacity-50"
+                style={{ color: TEXT }}
+              />
+              <button
+                type="submit"
+                disabled={!inputValue.trim() || isLoading || isComplete}
+                className="w-10 h-10 flex items-center justify-center rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
+                style={{ background: '#8C7E6A', color: '#FFFFFF' }}
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

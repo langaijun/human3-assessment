@@ -38,3 +38,7 @@ export interface ChatState {
   isComplete: boolean;
   result: AssessmentResult | null;
 }
+
+// Re-export version types
+export type { AppVersion, VersionState, PaymentStatus } from './version';
+export type { PayPalOrderStatus, PayPalCaptureStatus, PayPalCapture, PayPalOrder, PayPalPurchaseUnit, PayPalAmount, PayPalBreakdown, PayPalPayee, CreateOrderRequest, CreateOrderResponse, CaptureOrderRequest, CaptureOrderResponse, PayPalErrorCode, PayPalErrorCodeType, PayPalErrorMessages } from './paypal';

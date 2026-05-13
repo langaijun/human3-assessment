@@ -1,8 +1,13 @@
 import { useState, useCallback } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Lock } from 'lucide-react';
+import type { AppVersion } from '@/types/version';
+import { VERSION_FEATURES } from '@/constants';
+import VersionSelector from '@/components/VersionSelector';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput: string) => void;
+  selectedVersion: AppVersion;
+  onVersionSelect: (version: AppVersion) => void;
 }
 
 const BG = '#FDF6E3';
@@ -11,9 +16,14 @@ const BORDER = '#E8DCC8';
 const TEXT = '#3D3229';
 const TEXT_MUTED = '#8C7E6A';
 
-export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
+export default function HeroSection({
+  onStartAssessment,
+  selectedVersion,
+  onVersionSelect,
+}: HeroSectionProps) {
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showVersionSelector, setShowVersionSelector] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +32,26 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
     setTimeout(() => {
       onStartAssessment(inputValue.trim());
     }, 500);
+  }, [inputValue, isTransitioning, onStartAssessment]);
+
+  const handleVersionSwitchClick = () => {
+    setShowVersionSelector(true);
+  };
+
+  const handleVersionSelect = useCallback((version: AppVersion) => {
+    if (version === 'complete' && selectedVersion === 'simple') {
+      setShowVersionSelector(true);
+    } else {
+      onVersionSelect(version);
+    }
+  }, [selectedVersion, onVersionSelect]);
+
+  const handleStartFromSelector = useCallback(() => {
+    setShowVersionSelector(false);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      onStartAssessment(inputValue.trim());
+    }, 300);
   }, [inputValue, isTransitioning, onStartAssessment]);
 
   return (
@@ -37,8 +67,72 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
           </div>
           <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0</span>
         </div>
-        <div className="text-xs" style={{ color: TEXT_MUTED }}>基于 HUMAN 3.0 发展模型</div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleVersionSwitchClick}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
+            style={{ background: BG_CARD, border: `1px solid ${BORDER}`, color: TEXT_MUTED }}
+          >
+            {VERSION_FEATURES[selectedVersion].title}
+            {selectedVersion === 'complete' && (
+              <Lock className="w-3 h-3" style={{ color: TEXT }} />
+            )}
+          </button>
+
+          <button
+            onClick={handleVersionSwitchClick}
+            className="text-xs hover:underline"
+            style={{ color: TEXT_MUTED }}
+          >
+            切换版本
+          </button>
+        </div>
       </nav>
+
+      {/* Version Selector Modal */}
+      {showVersionSelector && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>选择版本</h2>
+              <button
+                onClick={() => setShowVersionSelector(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6L18 6" />
+                </svg>
+              </button>
+            </div>
+
+            <VersionSelector
+              selectedVersion={selectedVersion}
+              onVersionSelect={handleVersionSelect}
+            />
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={handleStartFromSelector}
+                className="flex-1 py-3 rounded-lg font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={!inputValue.trim()}
+                style={{ background: '#4CAF50' }}
+              >
+                <span>开始评估</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => setShowVersionSelector(false)}
+                className="flex-1 py-3 rounded-lg text-white transition-all"
+                style={{ border: `1px solid ${BORDER}`, color: TEXT }}
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main content */}
       <div
@@ -48,24 +142,24 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
       >
         <div className="w-full max-w-2xl">
           {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-semibold mb-3 leading-tight tracking-tight" style={{ color: TEXT }}>
-            你正处于哪一个进化阶段？
+          <h1 className="text-4xl md:text-5xl font-bold mb-3 text-center" style={{ color: TEXT }}>
+            {VERSION_FEATURES[selectedVersion].title}
           </h1>
-          <p className="text-base mb-3" style={{ color: TEXT_MUTED }}>
-            通过 HUMAN 3.0 模型，探索你在心智、身体、灵性、职业四个维度的发展现状，找到你的最大瓶颈。
-          </p>
-          <p className="text-sm mb-10" style={{ color: TEXT_MUTED }}>
-            Based on Dan Koe's Human 3.0 framework — discover whether you're a Conformist, Individualist, or Synthesist. Take the assessment to unlock your evolution stage.
+          <p className="text-base mb-10 text-center" style={{ color: TEXT_MUTED }}>
+            {VERSION_FEATURES[selectedVersion].description}
           </p>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="mb-4">
+          <form onSubmit={handleSubmit} className="mb-8">
             <div className="relative">
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="描述你目前最大的困惑或目标..."
+                placeholder={selectedVersion === 'complete'
+                  ? '描述你目前最大的困惑或目标，进行深度分析...'
+                  : '描述你目前最大的困惑或目标...'
+                }
                 disabled={isTransitioning}
                 className="w-full h-12 pl-4 pr-14 rounded-lg text-sm outline-none transition-all disabled:opacity-50"
                 style={{
@@ -78,6 +172,7 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
                 type="submit"
                 disabled={!inputValue.trim() || isTransitioning}
                 className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                disabled={!inputValue.trim() || isTransitioning}
                 style={{ background: '#8C7E6A', color: '#FFFFFF' }}
               >
                 <ArrowRight className="w-4 h-4" />
@@ -86,7 +181,7 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
           </form>
 
           {/* Example prompts */}
-          <div className="flex flex-wrap gap-2 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {['我感觉被困住了', '我想找到职业方向', '我的人际关系很困扰', '我想提升身体状态'].map((prompt) => (
               <button
                 key={prompt}
@@ -103,24 +198,6 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
               </button>
             ))}
           </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { title: '四维评估', desc: '心智、身体、灵性、职业四个维度的深度测评' },
-              { title: 'AI 对话式测评', desc: '像与导师对话一样自然，自适应追问至 12-20 轮' },
-              { title: '个性化报告', desc: '生成你的人格元类型 (Metatype) 与转型策略' },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="p-4 rounded-lg"
-                style={{ background: BG_CARD, border: `1px solid ${BORDER}` }}
-              >
-                <h3 className="text-sm font-medium mb-1" style={{ color: TEXT }}>{feature.title}</h3>
-                <p className="text-xs leading-relaxed" style={{ color: TEXT_MUTED }}>{feature.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -128,6 +205,9 @@ export default function HeroSection({ onStartAssessment }: HeroSectionProps) {
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
         <p className="text-xs text-center" style={{ color: TEXT_MUTED }}>
           HUMAN 3.0 Development Model · Multidimensional Potential Assessment
+        </p>
+        <p className="text-[10px]" style={{ color: '#8C7E6A' }}>
+          致敬 Dan Koe —— Human 3.0 框架的提出者
         </p>
       </footer>
     </div>
