@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, TrendingUp, AlertCircle, Target, Lock, Star, CheckCircle } from 'lucide-react';
+import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, TrendingUp, Target, Lock, Star, CheckCircle } from 'lucide-react';
 import type { AssessmentResult, AppVersion } from '@/types';
 import { useVersionState } from '@/hooks/usePersistentVersionState';
 import { VERSION_FEATURES } from '@/constants';
-
-interface ReportPageProps {
-  result: AssessmentResult;
-  onRestart: () => void;
-}
 
 const BG = '#FDF6E3';
 const BORDER = '#E8DCC8';
@@ -46,10 +41,17 @@ function QuadrantCard({
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(entry.target); } },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
       { threshold: 0.2 }
     );
-    if (cardRef.current) observer.observe(cardRef.current);
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
     return () => observer.disconnect();
   }, []);
 
@@ -65,31 +67,57 @@ function QuadrantCard({
       style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}
     >
       <div className="relative h-40 overflow-hidden">
-        <img src={image} alt={title} className="w-full h-full object-cover" style={{ filter: `hue-rotate(${level * 30}deg)` }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #FDF6E3 0%, #FDF6E300 60%)' }} />
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover"
+          style={{ filter: `hue-rotate(${level * 30}deg)` }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to top, #FDF6E3 0%, #FDF6E300 60%)' }}
+        />
         <div className="absolute bottom-3 left-4 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${color}15` }}>
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: `${color}15` }}
+          >
             <Icon className="w-4 h-4" style={{ color }} />
           </div>
           <div>
-            <h3 className="font-medium text-sm" style={{ color: TEXT }}>{title}</h3>
+            <h3 className="font-medium text-sm" style={{ color: TEXT }}>
+              {title}
+            </h3>
             <p className="text-xs" style={{ color: TEXT_MUTED }}>
-              Level {levelNames[level - 1]}{phaseNames[phase - 1]}
+              Level {levelNames[level - 1]}
+              {phaseNames[phase - 1]}
             </p>
           </div>
         </div>
       </div>
-
       <div className="p-4">
         <div className="mb-2">
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: `${color}10`, color, border: `1px solid ${color}20` }}>
+          <span
+            className="text-xs px-2 py-0.5 rounded-full"
+            style={{ background: `${color}10`, color, border: `1px solid ${color}20` }}
+          >
             {traits}
           </span>
         </div>
-        <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>{analysis}</p>
+        <p
+          className="text-sm leading-relaxed"
+          style={{ color: '#6B5F50' }}
+        >
+          {analysis}
+        </p>
       </div>
     </div>
   );
+}
+
+interface ReportPageProps {
+  result: AssessmentResult;
+  onRestart: () => void;
 }
 
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
@@ -106,7 +134,13 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
     containerRef.current?.scrollTo({ top: containerRef.current.clientHeight * 0.6, behavior: 'smooth' });
   };
 
-  const dimensionColors = { mind: '#8B7EC8', body: '#5A8F5A', spirit: '#8B7EC8', vocation: '#C4956A' };
+  const dimensionColors = {
+    mind: '#8B7EC8',
+    body: '#5A8F5A',
+    spirit: '#8B7EC8',
+    vocation: '#C4956A'
+  };
+
   const dimensionImages = {
     mind: '/images/mind-dimension.jpg',
     body: '/images/body-dimension.jpg',
@@ -119,7 +153,10 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
       {/* Hero section */}
       <div className="px-6 py-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center" style={{ color: TEXT }}>
+          <h1
+            className="text-3xl md:text-4xl font-bold mb-2 text-center"
+            style={{ color: TEXT }}
+          >
             你的评估结果
           </h1>
 
@@ -129,7 +166,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
           {isCompleteVersion && (
             <div className="flex items-center justify-center gap-2 mb-6">
-              <Star className="w-5 h-5 fill="#FF9800" />
+              <Star className="w-5 h-5" style={{ fill: '#FF9800' }} />
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium" style={{ background: '#FFF9F0', color: '#FF9800' }}>
                 完整版深度分析
               </span>
@@ -139,13 +176,13 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
       </div>
 
       {/* Dimensions section */}
-      <div className="px-6 py-4">
+      <div className="px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: TEXT }}>
             四维评估结果
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
             <QuadrantCard
               title="心智维度"
               icon={Brain}
@@ -211,56 +248,90 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
       {/* Transformation strategy section */}
       <div className="px-6 py-4">
         <div className="max-w-2xl mx-auto">
-          <div className="rounded-xl p-6 md:p-8 mb-10" style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}>
+          <div className="flex items-center gap-2 mb-8">
+            <Target className="w-5 h-5" style={{ color: TEXT }} />
+            <h2 className="text-2xl font-semibold" style={{ color: TEXT }}>
+              转型策略
+            </h2>
+          </div>
+
+          <div className="rounded-xl p-6 mb-10" style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}>
             <div className="flex items-center gap-2 mb-3">
-              <Target className="w-5 h-5" style={{ color: TEXT }} />
-              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>转型策略</h2>
+              <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                <span className="text-2xl font-bold text-white">1</span>
+              </div>
+              <p className="text-sm" style={{ color: TEXT }}>
+                核心策略
+              </p>
             </div>
 
-            {!isCompleteVersion && (
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium" style={{ background: '#FFF9F0', color: '#FF9800' }}>
-                <Star className="w-3 h-3 fill="#FF9800" />
-                完整版深度分析
-              </span>
-            )}
+            <p className="leading-relaxed mb-8" style={{ color: '#4A4035' }}>
+              {result.transformationStrategy}
+            </p>
 
-            <p className="leading-relaxed mb-8" style={{ color: '#4A4035' }}>{result.transformationStrategy}</p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                  <span className="text-white text-xs">2</span>
+                </div>
+                <p className="text-sm leading-relaxed">
+                  具体行动计划：基于你当前的能力和发展阶段，提供可执行的改进方案。
+                </p>
+              </div>
 
-            <p className="text-xs uppercase tracking-wider mb-3" style={{ color: TEXT_MUTED }}>核心策略</p>
-            <p className="leading-relaxed mb-8" style={{ color: TEXT }}>
-              {result.nextSteps.slice(0, 1).map((step, i) => (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                  <span className="text-white text-xs">3</span>
+                </div>
+                <p className="text-sm leading-relaxed">
+                  习惯重塑：识别并替换阻碍发展的旧习惯模式，建立支持成长的新行为。
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                  <span className="text-white text-xs">4</span>
+                </div>
+                <p className="text-sm leading-relaxed">
+                  系统整合：将四个维度的改进方案整合到你的日常生活中，形成一致的生活方式。
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                  <span className="text-white text-xs">5</span>
+                </div>
+                <p className="text-sm leading-relaxed">
+                  持续评估：建立定期自我反思的习惯，使用 HUMAN 3.0 框架追踪你的成长。
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs uppercase tracking-wider mb-3" style={{ color: TEXT_MUTED }}>
+              下一步行动
+            </p>
+
+            <div className="space-y-3">
+              {result.nextSteps.slice(0, 3).map((step, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: '#8C7E6A' }}>
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{ background: '#8C7E6A' }}
+                  >
                     <span className="text-white text-xs">{i + 1}</span>
                   </div>
                   <p className="text-sm leading-relaxed">{step}</p>
                 </div>
               ))}
-            </p>
 
-            <p className="text-xs uppercase tracking-wider mb-4" style={{ color: TEXT_MUTED }}>下一步行动</p>
-            <div className="space-y-3">
-              {result.nextSteps.slice(1).map((step, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: '#8C7E6A' }}>
-                    <span className="text-white text-xs">{i + 2}</span>
-                  </div>
-                  <p className="text-sm leading-relaxed">{step}</p>
+              {!isCompleteVersion && (
+                <div className="p-4 rounded-lg" style={{ background: '#FDF6E8' }}>
+                  <p className="text-sm text-center" style={{ color: TEXT }}>
+                    完整版提供深度分析和详细建议
+                  </p>
                 </div>
-              ))}
+              )}
             </div>
-
-            {!isCompleteVersion && (
-              <div className="mt-6 p-4 rounded-lg" style={{ background: '#FDF6E8' }}>
-                <p className="text-sm text-center" style={{ color: TEXT }}>
-                  完整版提供深度分析和详细建议
-                </p>
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <Lock className="w-5 h-5" style={{ color: TEXT_MUTED }} />
-                  <span className="text-sm">升级到完整版解锁所有功能</span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
