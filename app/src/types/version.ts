@@ -24,6 +24,18 @@ export interface VersionState {
   lastUpdated?: Date;
 }
 
+/**
+ * 版本功能描述接口
+ */
+export interface VersionFeatures {
+  id: AppVersion;
+  title: string;
+  description: string;
+  price?: number;
+  features: string[];
+  recommended?: boolean;
+}
+
 export const DEFAULT_VERSION_STATE: VersionState = {
   selectedVersion: 'simple',
   isPaid: false,
