@@ -5,7 +5,6 @@ import HeroSection from '@/sections/HeroSection';
 import AssessmentInterface from '@/sections/AssessmentInterface';
 import MetatypeCanvas from '@/sections/MetatypeCanvas';
 import ReportPage from '@/sections/ReportPage';
-import { VersionProvider } from '@/context/VersionContext';
 import { usePersistentVersionState } from '@/hooks/usePersistentVersionState';
 
 const BG_COLOR = '#FDF6E3';
@@ -50,38 +49,36 @@ function App() {
   }, []);
 
   return (
-    <VersionProvider>
-      <div className="relative w-full min-h-screen" style={{ background: BG_COLOR }}>
-        {phase === 'hero' && (
-          <HeroSection
-            onStartAssessment={handleStartAssessment}
-            selectedVersion={selectedVersion}
-            onVersionSelect={handleVersionSelect}
-          />
-        )}
+    <div className="relative w-full min-h-screen" style={{ background: BG_COLOR }}>
+      {phase === 'hero' && (
+        <HeroSection
+          onStartAssessment={handleStartAssessment}
+          selectedVersion={selectedVersion}
+          onVersionSelect={handleVersionSelect}
+        />
+      )}
 
-        {phase === 'assessment' && (
-          <AssessmentInterface
-            initialInput={initialInput}
-            onComplete={handleAssessmentComplete}
-          />
-        )}
+      {phase === 'assessment' && (
+        <AssessmentInterface
+          initialInput={initialInput}
+          onComplete={handleAssessmentComplete}
+        />
+      )}
 
-        {phase === 'metatype' && assessmentResult && (
-          <MetatypeCanvas
-            result={assessmentResult}
-            onComplete={handleMetatypeComplete}
-          />
-        )}
+      {phase === 'metatype' && assessmentResult && (
+        <MetatypeCanvas
+          result={assessmentResult}
+          onComplete={handleMetatypeComplete}
+        />
+      )}
 
-        {phase === 'report' && assessmentResult && (
-          <ReportPage
-            result={assessmentResult}
-            onRestart={handleRestart}
-          />
-        )}
-      </div>
-    </VersionProvider>
+      {phase === 'report' && assessmentResult && (
+        <ReportPage
+          result={assessmentResult}
+          onRestart={handleRestart}
+        />
+      )}
+    </div>
   );
 }
 
