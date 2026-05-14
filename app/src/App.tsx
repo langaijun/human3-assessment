@@ -39,9 +39,6 @@ function App() {
     setPhase('report');
   }, []);
 
-  const handleVersionSelect = useCallback((version: AppVersion) => {
-    setSelectedVersion(version);
-  }, []);
 
   const handleRestart = useCallback(() => {
     setPhase('hero');
@@ -56,7 +53,6 @@ function App() {
         <HeroSection
           onStartAssessment={handleStartAssessment}
           selectedVersion={selectedVersion}
-          onVersionSelect={handleVersionSelect}
         />
       )}
 

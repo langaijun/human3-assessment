@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, Loader2, User, Bot } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
-import UpgradeButton from '@/components/UpgradeButton';
+import { UpgradeButton } from '@/components/UpgradeButton';
 import type { AssessmentResult } from '@/types';
 
 const BG = '#FDF6E3';

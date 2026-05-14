@@ -8,7 +8,6 @@ import PayPalPayment from '../components/PayPalPayment';
 interface HeroSectionProps {
   onStartAssessment: (initialInput?: string) => void;
   selectedVersion: AppVersion;
-  onVersionSelect: (version: AppVersion) => void;
 }
 
 const BG = '#FDF6E3';
@@ -20,7 +19,6 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
   selectedVersion,
-  onVersionSelect,
 }: HeroSectionProps) {
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
