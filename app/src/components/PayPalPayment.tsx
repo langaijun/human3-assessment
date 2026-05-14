@@ -10,14 +10,14 @@ import { toast } from 'sonner';
 import { PAYMENT } from '@/constants';
 
 interface PayPalPaymentProps {
+  onClose?: () => void;
   onSuccess?: () => void;
-  onCancel?: () => void;
   onFail?: (error: string) => void;
 }
 
 export default function PayPalPayment({
+  onClose,
   onSuccess,
-  onCancel,
   onFail
 }: PayPalPaymentProps) {
   const { state, actions } = useVersion();
@@ -96,7 +96,7 @@ export default function PayPalPayment({
 
   const handleCancel = () => {
     actions.setPaymentStatus('none');
-    onCancel?.();
+    onClose?.();
   };
 
   if (isLoading) {

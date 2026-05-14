@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, Loader2, User, Bot } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
-import { usePersistentVersionState } from '@/hooks/usePersistentVersionState';
 import UpgradeButton from '@/components/UpgradeButton';
 import type { AssessmentResult } from '@/types';
 
