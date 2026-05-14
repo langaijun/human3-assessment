@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { AssessmentResult, AppPhase } from '@/types';
 import type { AppVersion } from '@/types/version';
 import HeroSection from '@/sections/HeroSection';

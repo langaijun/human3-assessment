@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { AppVersion } from '@/types/version';
 import { VERSION_FEATURES } from '@/constants';
-import VersionSelector from '@/components/VersionSelector';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput: string) => void;
@@ -34,26 +33,6 @@ export default function HeroSection({
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
 
-  const handleVersionSwitchClick = () => {
-    setShowVersionSelector(true);
-  };
-
-  const handleVersionSelect = useCallback((version: AppVersion) => {
-    if (version === 'complete' && selectedVersion === 'simple') {
-      setShowVersionSelector(true);
-    } else {
-      onVersionSelect(version);
-    }
-  }, [selectedVersion, onVersionSelect]);
-
-  const handleStartFromSelector = useCallback(() => {
-    setShowVersionSelector(false);
-    setIsTransitioning(true);
-    setTimeout(() => {
-      onStartAssessment(inputValue.trim());
-    }, 300);
-  }, [inputValue, isTransitioning, onStartAssessment]);
-
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
       {/* Navigation */}
@@ -70,18 +49,20 @@ export default function HeroSection({
 
         <div className="flex items-center gap-3">
           <button
-            onClick={handleVersionSwitchClick}
+            onClick={() => setShowVersionSelector(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
             style={{ background: BG_CARD, border: `1px solid ${BORDER}`, color: TEXT_MUTED }}
           >
             {VERSION_FEATURES[selectedVersion].title}
             {selectedVersion === 'complete' && (
-              <Lock className="w-3 h-3" style={{ color: TEXT }} />
+              <span className="ml-2 px-2 py-0.5 rounded-full text-xs" style={{ background: '#FF9800', color: '#FFFFFF' }}>
+                已解锁
+              </span>
             )}
           </button>
 
           <button
-            onClick={handleVersionSwitchClick}
+            onClick={() => setShowVersionSelector(true)}
             className="text-xs hover:underline"
             style={{ color: TEXT_MUTED }}
           >
@@ -93,8 +74,8 @@ export default function HeroSection({
       {/* Version Selector Modal */}
       {showVersionSelector && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-xl w-full mx-auto">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold" style={{ color: TEXT }}>升级到完整版</h2>
               <button
                 onClick={() => setShowVersionSelector(false)}
@@ -106,28 +87,64 @@ export default function HeroSection({
               </button>
             </div>
 
-            <VersionSelector
-              selectedVersion="complete"
-              onVersionSelect={handleVersionSelect}
-            />
+            {/* Only show Complete version option */}
+            <div
+              className="p-8 rounded-2xl border-2 transition-all hover:shadow-lg cursor-pointer"
+              style={{ background: '#FDF6E3', borderColor: '#8C7E6A', borderWidth: '2px' }}
+            >
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: '#FF9800' }}>
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
+                    <path d="M5 3v21a1 1 1h12a2-6l-7.07 1 4 82a2-6.3l.5 12a-2-5.12a-3.18l-5.64l-3.025-1.6.06l-6.34-3.06l-6.34" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>完整版</h3>
+                <p className="text-3xl font-bold text-blue-600 mb-2">$5</p>
+                <p className="text-gray-600 mb-6">一次性付费 · 鸸久享有</p>
+              </div>
 
-            <div className="flex gap-3 mt-6">
+              <div className="space-y-3 mb-6 text-sm" style={{ color: '#6B5F50' }}>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
+                    <path d="M5 13l4 4-4h24l-4-4h24M24 16" />
+                  </svg>
+                  <span>完整评估流程（20轮深度对话）</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
+                    <path d="M9 12l4 4-4h24l-4-4h24M24 12" />
+                  </svg>
+                  <span>个性化深度分析</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
+                    <path d="M12 2l4 4-4h24l-4-4h24M24 4" />
+                  </svg>
+                  <span>详细改进建议</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
+                    <path d="M5 8v21a1 1 4h22a1 1 2h22a1 1" />
+                  </svg>
+                  <span>完整版报告</span>
+                </div>
+              </div>
+
               <button
-                onClick={handleStartFromSelector}
-                className="flex-1 py-3 rounded-lg font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                disabled={!inputValue.trim()}
+                onClick={() => { onVersionSelect('complete'); setShowVersionSelector(false); }}
+                className="w-full py-4 rounded-lg font-medium text-white transition-all hover:brightness-95"
                 style={{ background: '#4CAF50' }}
               >
-                <span>开始评估</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>升级到完整版</span>
+                <ArrowRight className="w-5 h-5 ml-2" />
               </button>
 
               <button
                 onClick={() => setShowVersionSelector(false)}
-                className="flex-1 py-3 rounded-lg text-white transition-all"
-                style={{ border: `1px solid ${BORDER}`, color: TEXT }}
+                className="w-full py-4 rounded-lg font-medium transition-all border"
+                style={{ borderColor: BORDER, color: TEXT }}
               >
-                取消
+                稍后再说
               </button>
             </div>
           </div>
