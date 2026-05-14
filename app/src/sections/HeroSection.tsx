@@ -95,7 +95,7 @@ export default function HeroSection({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
           <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full mx-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>选择版本</h2>
+              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>升级到完整版</h2>
               <button
                 onClick={() => setShowVersionSelector(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -107,7 +107,7 @@ export default function HeroSection({
             </div>
 
             <VersionSelector
-              selectedVersion={selectedVersion}
+              selectedVersion="complete"
               onVersionSelect={handleVersionSelect}
             />
 
@@ -202,12 +202,17 @@ export default function HeroSection({
 
       {/* Footer */}
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <p className="text-xs text-center" style={{ color: TEXT_MUTED }}>
-          HUMAN 3.0 Development Model · Multidimensional Potential Assessment
-        </p>
-        <p className="text-[10px]" style={{ color: '#8C7E6A' }}>
-          致敬 Dan Koe —— Human 3.0 框架的提出者
-        </p>
+        <div className="max-w-2xl mx-auto text-center space-y-2">
+          <p className="text-xs" style={{ color: TEXT_MUTED }}>
+            HUMAN 3.0 Development Model · Multidimensional Potential Assessment
+          </p>
+          <p className="text-xs" style={{ color: '#8C7E6A' }}>
+            致敬 Dan Koe —— Human 3.0 框架的提出者
+          </p>
+          <p className="text-xs" style={{ color: TEXT_MUTED }}>
+            联系邮箱: <a href="mailto:langaijun@foxmail.com" className="hover:underline">langaijun@foxmail.com</a>
+          </p>
+        </div>
       </footer>
     </div>
   );

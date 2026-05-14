@@ -143,7 +143,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
             )}
           </div>
         </div>
-
         <div className="flex items-center gap-2">
           <div className="text-xs" style={{ color: TEXT_MUTED }}>
             {assistantCount}/{maxRounds} 轮对话
@@ -153,12 +152,14 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
 
       {/* Chat messages */}
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto">
-        {messages.map((msg) => {
-          if (msg.role === 'user') {
-            return <UserMessage key={msg.id} content={msg.content} />;
-          }
-          return <AIMessage key={msg.id} content={msg.content} />;
-        })}
+        <div className="max-w-2xl mx-auto px-4">
+          {messages.map((msg) => {
+            if (msg.role === 'user') {
+              return <UserMessage key={msg.id} content={msg.content} />;
+            }
+            return <AIMessage key={msg.id} content={msg.content} />;
+          })}
+        </div>
 
         {isLoading && <TypingIndicator />}
 
@@ -185,7 +186,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
 
       {/* Input area */}
       <div className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}`, background: BG }}>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <form onSubmit={handleSubmit}>
             <div
               className="flex items-end gap-3 rounded-xl p-3"
