@@ -5,8 +5,7 @@ import HeroSection from '@/sections/HeroSection';
 import AssessmentInterface from '@/sections/AssessmentInterface';
 import MetatypeCanvas from '@/sections/MetatypeCanvas';
 import ReportPage from '@/sections/ReportPage';
-import { useVersionState } from '@/hooks/usePersistentVersionState';
-import { VERSION_FEATURES } from '@/constants';
+import { usePersistentVersionState } from '@/hooks/usePersistentVersionState';
 
 const BG_COLOR = '#FDF6E3';
 
@@ -15,24 +14,19 @@ function App() {
   const [initialInput, setInitialInput] = useState('');
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [selectedVersion, setSelectedVersion] = useState<AppVersion>('simple');
-  const [showVersionSelector, setShowVersionSelector] = useState(false);
 
-  const { versionState, setVersionState, isLoaded } = useVersionState();
+  const { versionState, isLoaded } = usePersistentVersionState();
 
   useEffect(() => {
-    if (isLoaded && versionState.selectedVersion) {
+    if (isLoaded && versionState?.selectedVersion) {
       setSelectedVersion(versionState.selectedVersion);
     }
-  }, [isLoaded, versionState]);
+  }, [isLoaded, versionState?.selectedVersion]);
 
   const handleStartAssessment = useCallback((input: string) => {
-    if (selectedVersion === 'complete' && !versionState.isPaid) {
-      setShowVersionSelector(true);
-    } else {
-      setInitialInput(input);
-      setPhase('assessment');
-    }
-  }, [selectedVersion, versionState.isPaid]);
+    setInitialInput(input);
+    setPhase('assessment');
+  }, []);
 
   const handleAssessmentComplete = useCallback((result: AssessmentResult) => {
     setAssessmentResult(result);
@@ -45,7 +39,6 @@ function App() {
 
   const handleVersionSelect = useCallback((version: AppVersion) => {
     setSelectedVersion(version);
-    setShowVersionSelector(false);
   }, []);
 
   const handleRestart = useCallback(() => {
@@ -62,7 +55,6 @@ function App() {
           onStartAssessment={handleStartAssessment}
           selectedVersion={selectedVersion}
           onVersionSelect={handleVersionSelect}
-          showVersionSelector={showVersionSelector}
         />
       )}
 
@@ -84,7 +76,6 @@ function App() {
         <ReportPage
           result={assessmentResult}
           onRestart={handleRestart}
-          selectedVersion={selectedVersion}
         />
       )}
     </div>

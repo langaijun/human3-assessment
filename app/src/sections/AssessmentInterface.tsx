@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Loader2, User, Bot, Lock } from 'lucide-react';
+import { Send, Loader2, User, Bot } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
 import type { AssessmentResult } from '@/types';
 
@@ -75,27 +75,31 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     isComplete,
     result,
     sendMessage,
-    handleStartAssessment,
-    handleChatComplete,
     isPaid
   } = useVersionChat();
 
   const [inputValue, setInputValue] = useState('');
-  const [hasStarted, setHasStarted] = useState(false);
+  const hasStartedRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!hasStarted && initialInput) {
-      setHasStarted(true);
+    if (!hasStartedRef.current && initialInput) {
+      hasStartedRef.current = true;
       setTimeout(() => sendMessage(initialInput), 300);
     }
-  }, [hasStarted, initialInput, sendMessage]);
+  }, [initialInput, sendMessage]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (isComplete && result) {
+      setTimeout(() => onComplete(result), 500);
+    }
+  }, [isComplete, result, onComplete]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
   const progress = Math.min((assistantCount / (isPaid ? 20 : 12)) * 100, 100);

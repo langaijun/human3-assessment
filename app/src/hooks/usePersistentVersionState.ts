@@ -3,7 +3,6 @@
  */
 import { useState, useEffect } from 'react';
 import { useVersion } from '@/context/VersionContext';
-import { VERSION_STATE_KEY, DEFAULT_VERSION_STATE } from '@/types/version';
 import type { VersionState } from '@/types';
 
 export function usePersistentVersionState() {
@@ -68,7 +67,7 @@ export function useCurrentVersion() {
 }
 
 export function useVersionSwitch() {
-  const { state, actions } = useVersion();
+  const { actions } = useVersion();
 
   const switchToVersion = (newVersion: 'simple' | 'complete') => {
     actions.switchVersion(newVersion);

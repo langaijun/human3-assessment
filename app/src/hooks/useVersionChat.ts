@@ -4,35 +4,31 @@
 import { useState, useCallback } from 'react';
 import { useVersion } from '@/context/VersionContext';
 import { useDeepSeekChat } from '@/hooks/useDeepSeekChat';
-import type { Message } from '@/types';
 
 interface VersionChatOptions {
-  onComplete?: (result: any) => void;
+  onComplete?: (result: unknown) => void;
   maxRounds?: number;
   systemPromptOverride?: string;
 }
 
 export function useVersionChat(options: VersionChatOptions = {}) {
-  const { state, actions } = useVersion();
+  const { state } = useVersion();
   const [chatEnabled, setChatEnabled] = useState(false);
 
-  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({
-    systemPromptOverride: options.systemPromptOverride,
-    maxRounds: options.maxRounds,
-  });
+  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat();
 
   const handleStartAssessment = useCallback((input: string) => {
     setChatEnabled(true);
     sendMessage(input);
-  }, []);
+  }, [sendMessage]);
 
   const isPaid = state.isPaid && state.selectedVersion === 'complete';
 
-  const handleChatComplete = useCallback((finalResult: any) => {
+  const handleChatComplete = useCallback((finalResult: unknown) => {
     if (options.onComplete) {
       options.onComplete(finalResult);
     }
-  }, [options.onComplete]);
+  }, [options]);
 
   return {
     messages,

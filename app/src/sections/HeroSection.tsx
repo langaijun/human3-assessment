@@ -172,7 +172,6 @@ export default function HeroSection({
                 type="submit"
                 disabled={!inputValue.trim() || isTransitioning}
                 className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                disabled={!inputValue.trim() || isTransitioning}
                 style={{ background: '#8C7E6A', color: '#FFFFFF' }}
               >
                 <ArrowRight className="w-4 h-4" />

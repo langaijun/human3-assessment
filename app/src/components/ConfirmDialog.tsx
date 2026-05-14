@@ -1,7 +1,6 @@
 /**
  * Human3.0 系统确认对话框组件
  */
-import { useState } from 'react';
 import {
   Dialog,
   DialogContent,

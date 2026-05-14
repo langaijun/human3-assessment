@@ -41,7 +41,6 @@ export default function PaymentSuccess({
       }, 50);
       return () => clearTimeout(timer);
     }
-    return () => { if (timer) clearTimeout(timer); };
   }, [showConfetti, progress]);
 
   return (

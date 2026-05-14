@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, TrendingUp, Target, Lock, Star, CheckCircle } from 'lucide-react';
-import type { AssessmentResult, AppVersion } from '@/types';
-import { useVersionState } from '@/hooks/usePersistentVersionState';
-import { VERSION_FEATURES } from '@/constants';
+import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, Target } from 'lucide-react';
+import type { AssessmentResult } from '@/types';
 
 const BG = '#FDF6E3';
 const BORDER = '#E8DCC8';
 const TEXT = '#3D3229';
 const TEXT_MUTED = '#8C7E6A';
-const CARD_BG = '#F8F0D8';
 
 function ScoreBar({ label, score, color }: { label: string; score: number; color: string }) {
   const [width, setWidth] = useState(0);
@@ -122,13 +119,6 @@ interface ReportPageProps {
 
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showContent, setShowContent] = useState(false);
-  const { versionState } = useVersionState();
-  const isCompleteVersion = versionState.selectedVersion === 'complete';
-
-  useEffect(() => {
-    setTimeout(() => setShowContent(true), 200);
-  }, []);
 
   const scrollToDetails = () => {
     containerRef.current?.scrollTo({ top: containerRef.current.clientHeight * 0.6, behavior: 'smooth' });
@@ -163,15 +153,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
           <p className="text-center text-base mb-8" style={{ color: TEXT_MUTED }}>
             {result.metatypeName}
           </p>
-
-          {isCompleteVersion && (
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <Star className="w-5 h-5" style={{ fill: '#FF9800' }} />
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium" style={{ background: '#FFF9F0', color: '#FF9800' }}>
-                完整版深度分析
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -323,14 +304,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                   <p className="text-sm leading-relaxed">{step}</p>
                 </div>
               ))}
-
-              {!isCompleteVersion && (
-                <div className="p-4 rounded-lg" style={{ background: '#FDF6E8' }}>
-                  <p className="text-sm text-center" style={{ color: TEXT }}>
-                    完整版提供深度分析和详细建议
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         </div>
