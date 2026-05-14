@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, Loader2, User, Bot } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
+import { usePersistentVersionState } from '@/hooks/usePersistentVersionState';
+import UpgradeButton from '@/components/UpgradeButton';
 import type { AssessmentResult } from '@/types';
 
 const BG = '#FDF6E3';
@@ -143,7 +145,11 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
             )}
           </div>
         </div>
+
         <div className="flex items-center gap-2">
+          {!isPaid && (
+            <UpgradeButton />
+          )}
           <div className="text-xs" style={{ color: TEXT_MUTED }}>
             {assistantCount}/{maxRounds} 轮对话
           </div>
@@ -208,7 +214,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
                 className="w-10 h-10 flex items-center justify-center rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
                 style={{ background: '#8C7E6A', color: '#FFFFFF' }}
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
               </button>
             </div>
           </form>

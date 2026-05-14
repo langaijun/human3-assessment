@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
 import type { AppVersion } from '@/types/version';
 import { VERSION_FEATURES } from '@/constants';
+import DanKoeIntro from './DanKoeIntro';
+import PayPalPayment from '../components/PayPalPayment';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput: string) => void;
@@ -23,6 +25,8 @@ export default function HeroSection({
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [showDanKoe, setShowDanKoe] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +36,19 @@ export default function HeroSection({
       onStartAssessment(inputValue.trim());
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
+
+  const handleVersionSelect = useCallback((version: AppVersion) => {
+    onVersionSelect(version);
+    setShowVersionSelector(false);
+  }, [onVersionSelect]);
+
+  const handleVersionSwitchClick = () => {
+    setShowVersionSelector(true);
+  };
+
+  const handlePaymentClick = useCallback(() => {
+    setShowPayment(true);
+    }, []);
 
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
@@ -49,32 +66,43 @@ export default function HeroSection({
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setShowVersionSelector(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
-            style={{ background: BG_CARD, border: `1px solid ${BORDER}`, color: TEXT_MUTED }}
+            onClick={() => setShowDanKoe(true)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:scale-105"
+            style={{
+              background: BG_CARD,
+              border: `1px solid ${BORDER}`,
+              color: TEXT_MUTED,
+            }}
           >
-            {VERSION_FEATURES[selectedVersion].title}
-            {selectedVersion === 'complete' && (
-              <span className="ml-2 px-2 py-0.5 rounded-full text-xs" style={{ background: '#FF9800', color: '#FFFFFF' }}>
-                已解锁
-              </span>
-            )}
+            <span>了解框架</span>
           </button>
 
           <button
-            onClick={() => setShowVersionSelector(true)}
-            className="text-xs hover:underline"
-            style={{ color: TEXT_MUTED }}
+            onClick={handleVersionSwitchClick}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
+            style={{
+              background: BG_CARD,
+              border: `1px solid ${BORDER}`,
+              color: TEXT_MUTED,
+            }}
           >
-            切换版本
+            <span>{VERSION_FEATURES[selectedVersion].title}</span>
           </button>
         </div>
       </nav>
 
-      {/* Version Selector Modal */}
+      {/* Dan Koe Intro Page */}
+      {showDanKoe && (
+        <DanKoeIntro
+          onClose={() => setShowDanKoe(false)}
+          onStartAssessment={onStartAssessment}
+        />
+      )}
+
+      {/* Version Selector Modal - simplified with payment only */}
       {showVersionSelector && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-xl w-full mx-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold" style={{ color: TEXT }}>升级到完整版</h2>
               <button
@@ -87,66 +115,73 @@ export default function HeroSection({
               </button>
             </div>
 
-            {/* Only show Complete version option */}
+            {/* Complete Version Card - simplified */}
             <div
-              className="p-8 rounded-2xl border-2 transition-all hover:shadow-lg cursor-pointer"
+              className="p-6 rounded-2xl border-2 transition-all hover:shadow-lg cursor-pointer"
               style={{ background: '#FDF6E3', borderColor: '#8C7E6A', borderWidth: '2px' }}
             >
               <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: '#FF9800' }}>
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
-                    <path d="M5 3v21a1 1 1h12a2-6l-7.07 1 4 82a2-6.3l.5 12a-2-5.12a-3.18l-5.64l-3.025-1.6.06l-6.34-3.06l-6.34" />
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 1h12a2-6l-7.07 1 4 82a2-6.3l.5 12a-2-5.12a-3.18l-5.64l-3.025-1.6.06l-6.34-3.06l-6.34" />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>完整版</h3>
-                <p className="text-3xl font-bold text-blue-600 mb-2">$5</p>
-                <p className="text-gray-600 mb-6">一次性付费 · 鸸久享有</p>
+                <p className="text-3xl font-bold text-orange-600 mb-2">$5</p>
+                <p className="text-gray-600">一次性付费 · 永久享有完整版功能</p>
               </div>
 
-              <div className="space-y-3 mb-6 text-sm" style={{ color: '#6B5F50' }}>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
-                    <path d="M5 13l4 4-4h24l-4-4h24M24 16" />
-                  </svg>
-                  <span>完整评估流程（20轮深度对话）</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
-                    <path d="M9 12l4 4-4h24l-4-4h24M24 12" />
-                  </svg>
-                  <span>个性化深度分析</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
-                    <path d="M12 2l4 4-4h24l-4-4h24M24 4" />
-                  </svg>
-                  <span>详细改进建议</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#4CAF50" strokeWidth={2}>
-                    <path d="M5 8v21a1 1 4h22a1 1 2h22a1 1" />
-                  </svg>
-                  <span>完整版报告</span>
+              <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
+                <p className="mb-4 font-semibold">完整版包含：</p>
+                <div className="text-left space-y-2">
+                  <p>• 20轮深度对话评估（vs 基础版12轮）</p>
+                  <p>• 个性化深度分析报告</p>
+                  <p>• 详细改进建议和行动方案</p>
+                  <p>• 完整版专属功能解锁</p>
                 </div>
               </div>
 
               <button
-                onClick={() => { onVersionSelect('complete'); setShowVersionSelector(false); }}
-                className="w-full py-4 rounded-lg font-medium text-white transition-all hover:brightness-95"
-                style={{ background: '#4CAF50' }}
+                onClick={handlePaymentClick}
+                className="w-full py-4 rounded-lg font-bold text-white transition-all hover:brightness-95"
+                style={{ background: '#FF6B00' }}
               >
-                <span>升级到完整版</span>
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
-
-              <button
-                onClick={() => setShowVersionSelector(false)}
-                className="w-full py-4 rounded-lg font-medium transition-all border"
-                style={{ borderColor: BORDER, color: TEXT }}
-              >
-                稍后再说
+                <span>立即支付</span>
+                <span className="text-sm ml-2 opacity-90">（PayPal · $5.00）</span>
               </button>
             </div>
+
+            <button
+              onClick={() => setShowVersionSelector(false)}
+              className="w-full py-4 rounded-lg font-medium transition-all border"
+              style={{ borderColor: BORDER, color: TEXT }}
+            >
+              稍后再说
+            </button>
+
+            {/* Payment Modal */}
+            {showPayment && (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
+                <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-auto">
+                  <button
+                    onClick={() => setShowPayment(false)}
+                    className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6L18 6" />
+                    </svg>
+                  </button>
+
+                  <PayPalPayment
+                    onClose={() => setShowPayment(false)}
+                    onSuccess={() => {
+                      setShowPayment(false);
+                      setShowVersionSelector(false);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
