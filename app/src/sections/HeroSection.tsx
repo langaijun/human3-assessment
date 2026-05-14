@@ -6,7 +6,7 @@ import DanKoeIntro from './DanKoeIntro';
 import PayPalPayment from '../components/PayPalPayment';
 
 interface HeroSectionProps {
-  onStartAssessment: (initialInput: string) => void;
+  onStartAssessment: (initialInput?: string) => void;
   selectedVersion: AppVersion;
   onVersionSelect: (version: AppVersion) => void;
 }
@@ -37,18 +37,10 @@ export default function HeroSection({
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
 
-  const handleVersionSelect = useCallback((version: AppVersion) => {
-    onVersionSelect(version);
+  const handlePaymentSuccess = useCallback(() => {
+    setShowPayment(false);
     setShowVersionSelector(false);
-  }, [onVersionSelect]);
-
-  const handleVersionSwitchClick = () => {
-    setShowVersionSelector(true);
-  };
-
-  const handlePaymentClick = useCallback(() => {
-    setShowPayment(true);
-    }, []);
+  }, []);
 
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
@@ -78,7 +70,7 @@ export default function HeroSection({
           </button>
 
           <button
-            onClick={handleVersionSwitchClick}
+            onClick={() => setShowVersionSelector(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
             style={{
               background: BG_CARD,
@@ -117,7 +109,7 @@ export default function HeroSection({
 
             {/* Complete Version Card - simplified */}
             <div
-              className="p-6 rounded-2xl border-2 transition-all hover:shadow-lg cursor-pointer"
+              className="p-6 rounded-2xl border-2 transition-all hover:shadow-lg"
               style={{ background: '#FDF6E3', borderColor: '#8C7E6A', borderWidth: '2px' }}
             >
               <div className="text-center mb-6">
@@ -142,7 +134,7 @@ export default function HeroSection({
               </div>
 
               <button
-                onClick={handlePaymentClick}
+                onClick={() => setShowPayment(true)}
                 className="w-full py-4 rounded-lg font-bold text-white transition-all hover:brightness-95"
                 style={{ background: '#FF6B00' }}
               >
@@ -174,10 +166,7 @@ export default function HeroSection({
 
                   <PayPalPayment
                     onClose={() => setShowPayment(false)}
-                    onSuccess={() => {
-                      setShowPayment(false);
-                      setShowVersionSelector(false);
-                    }}
+                    onSuccess={handlePaymentSuccess}
                   />
                 </div>
               </div>

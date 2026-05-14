@@ -23,9 +23,11 @@ function App() {
     }
   }, [isLoaded, versionState?.selectedVersion]);
 
-  const handleStartAssessment = useCallback((input: string) => {
-    setInitialInput(input);
-    setPhase('assessment');
+  const handleStartAssessment = useCallback((input?: string) => {
+    if (input) {
+      setInitialInput(input);
+      setPhase('assessment');
+    }
   }, []);
 
   const handleAssessmentComplete = useCallback((result: AssessmentResult) => {

@@ -12,7 +12,7 @@ const ACCENT = '#8C7E6A';
 
 export default function DanKoeIntro({ onClose, onStartAssessment }: {
   onClose: () => void;
-  onStartAssessment: () => void;
+  onStartAssessment: (initialInput?: string) => void;
 }) {
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
@@ -172,7 +172,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
           {/* CTA */}
           <div className="text-center pb-8">
             <Button
-              onClick={onStartAssessment}
+              onClick={() => onStartAssessment?.()}
               size="lg"
               className="px-8"
               style={{ background: ACCENT }}
