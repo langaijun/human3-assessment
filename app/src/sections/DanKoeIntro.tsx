@@ -38,42 +38,11 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
           {/* Title */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: TEXT }}>
-              认识 Dan Koe
+              Human 3.0 思想框架
             </h1>
             <p className="text-lg" style={{ color: TEXT_MUTED }}>
               重塑你的思维模型
             </p>
-          </div>
-
-          {/* Introduction */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div>
-              <h2 className="text-xl font-semibold mb-3" style={{ color: TEXT }}>
-                谁是 Dan Koe？
-              </h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>
-                Dan Koe 是一位成功的创作者、思维模型和创业导师。他的核心思想是帮助人们从"员工思维模式"（Employee Mindset）中解放出来，过上更自主、更有意义的生活。
-              </p>
-              <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>
-                通过他的内容、播客和课程，他影响了数以百万计的人，帮助他们找到了自己的创作道路、建立了可持续的事业，并实现了真正的自由。
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-3" style={{ color: TEXT }}>
-                War Mode vs Monk Mode
-              </h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>
-                Dan Koe 提出了两种人生发展模式：<strong>War Mode</strong>（战争模式）和<strong>Monk Mode</strong>（僧侣模式）。
-              </p>
-              <ul className="space-y-2 text-sm" style={{ color: '#6B5F50' }}>
-                <li>• <strong>War Mode</strong>: 通过竞争、外验证、社交媒体来证明自己 - 最终精疲力竭</li>
-                <li>• <strong>Monk Mode</strong>: 通过深度工作、创造价值、建立真实连接来实现自我 - 可持续成长</li>
-              </ul>
-              <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>
-                Human 3.0 评估系统正是基于这种深刻的认知模式设计而来。
-              </p>
-            </div>
           </div>
 
           {/* Three Pillars */}
@@ -132,7 +101,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
           {/* Connection to Human 3.0 */}
           <div className="p-6 rounded-xl mb-8" style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}>
             <p className="text-sm leading-relaxed mb-4" style={{ color: TEXT }}>
-              这个评估系统基于 Dan Koe 的核心理念设计而来。它不仅仅是一个评估工具，更是一个帮助你发现自我、明确方向、真实生活的系统。
+              这个评估系统基于 Human 3.0 核心理念设计而来。它不仅仅是一个评估工具，更是一个帮助你发现自我、明确方向、真实生活的系统。
             </p>
             <p className="text-sm leading-relaxed" style={{ color: '#6B5F50' }}>
               通过评估你的<strong>心智（Mind）</strong>、<strong>身体（Body）</strong>、<strong>灵性（Spirit）</strong>和<strong>职业（Vocation）</strong>四个维度，我们帮你：
@@ -140,7 +109,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
             <ul className="space-y-3 ml-6" style={{ color: '#6B5F50' }}>
               <li className="flex items-start gap-2">
                 <span style={{ color: ACCENT }}>•</span>
-                <span>理解你的思维模式（War Mode vs Monk Mode）</span>
+                <span>理解你的思维模式</span>
               </li>
               <li className="flex items-start gap-2">
                 <span style={{ color: ACCENT }}>•</span>
@@ -155,18 +124,6 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
                 <span>提供持续的改进反馈和成长追踪</span>
               </li>
             </ul>
-          </div>
-
-          {/* Quote */}
-          <div className="p-6 text-center">
-            <blockquote className="max-w-2xl mx-auto">
-              <p className="text-lg italic mb-4" style={{ color: TEXT }}>
-                "最好的投资是投资自己——培养你的思维方式，构建你的技能，建立你的事业。"
-              </p>
-              <p className="text-sm" style={{ color: TEXT_MUTED }}>
-                —— Dan Koe
-              </p>
-            </blockquote>
           </div>
 
           {/* CTA */}

@@ -3,7 +3,6 @@ import { ArrowRight } from 'lucide-react';
 import type { AppVersion } from '@/types/version';
 import { VERSION_FEATURES } from '@/constants';
 import DanKoeIntro from './DanKoeIntro';
-import PayPalPayment from '../components/PayPalPayment';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput?: string) => void;
@@ -23,7 +22,6 @@ export default function HeroSection({
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
   const [showDanKoe, setShowDanKoe] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -35,9 +33,48 @@ export default function HeroSection({
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
 
-  const handlePaymentSuccess = useCallback(() => {
-    setShowPayment(false);
-    setShowVersionSelector(false);
+  const handlePayWithPayPal = useCallback(async () => {
+    const csrfToken = Math.random().toString(36).substring(2, 15) +
+                      Math.random().toString(36).substring(2, 15);
+    document.cookie = `csrf-token=${csrfToken}; path=/; max-age=3600`;
+
+    try {
+      // 创建订单
+      const response = await fetch('/api/paypal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 5,
+          currency: 'USD',
+          csrfToken
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert('支付失败：' + (data.error || '未知错误'));
+        return;
+      }
+
+      // 后台自动捕获支付
+      const captureResponse = await fetch('/api/paypal', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: data.orderId, csrfToken }),
+      });
+
+      const captureData = await captureResponse.json();
+
+      if (captureResponse.ok) {
+        alert('支付成功！');
+        setShowVersionSelector(false);
+      } else {
+        alert('支付处理失败：' + (captureData.error || '未知错误'));
+      }
+    } catch (error) {
+      alert('支付出错：' + (error instanceof Error ? error.message : '未知错误'));
+    }
   }, []);
 
   return (
@@ -64,7 +101,7 @@ export default function HeroSection({
               color: TEXT_MUTED,
             }}
           >
-            <span>了解框架</span>
+            <span>human3.0</span>
           </button>
 
           <button
@@ -76,7 +113,7 @@ export default function HeroSection({
               color: TEXT_MUTED,
             }}
           >
-            <span>{VERSION_FEATURES[selectedVersion].title}</span>
+            <span>完整版</span>
           </button>
         </div>
       </nav>
@@ -117,7 +154,6 @@ export default function HeroSection({
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>完整版</h3>
-                <p className="text-3xl font-bold text-orange-600 mb-2">$5</p>
                 <p className="text-gray-600">一次性付费 · 永久享有完整版功能</p>
               </div>
 
@@ -132,12 +168,11 @@ export default function HeroSection({
               </div>
 
               <button
-                onClick={() => setShowPayment(true)}
+                onClick={handlePayWithPayPal}
                 className="w-full py-4 rounded-lg font-bold text-white transition-all hover:brightness-95"
                 style={{ background: '#FF6B00' }}
               >
-                <span>立即支付</span>
-                <span className="text-sm ml-2 opacity-90">（PayPal · $5.00）</span>
+                <span>支付</span>
               </button>
             </div>
 
@@ -148,27 +183,6 @@ export default function HeroSection({
             >
               稍后再说
             </button>
-
-            {/* Payment Modal */}
-            {showPayment && (
-              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-                <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-auto">
-                  <button
-                    onClick={() => setShowPayment(false)}
-                    className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6L18 6" />
-                    </svg>
-                  </button>
-
-                  <PayPalPayment
-                    onClose={() => setShowPayment(false)}
-                    onSuccess={handlePaymentSuccess}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
