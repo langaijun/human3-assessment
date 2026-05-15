@@ -81,7 +81,6 @@ export default function HeroSection({
       {/* Dan Koe Intro Page */}
       {showDanKoe && (
         <DanKoeIntro
-          onClose={() => setShowDanKoe(false)}
           onStartAssessment={onStartAssessment}
         />
       )}
@@ -114,7 +113,6 @@ export default function HeroSection({
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>解锁完整功能</h3>
-                <p className="text-gray-600">一次性付费 · 永久享有所有功能</p>
               </div>
 
               <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>

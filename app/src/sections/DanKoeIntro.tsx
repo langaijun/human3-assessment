@@ -1,7 +1,6 @@
 /**
  * Human3.0 框架介绍页面 - 重构版
  */
-import { X } from 'lucide-react';
 import { introStyles } from '@/styles/introStyles';
 import { spacing } from '@/styles/tokens';
 import { ThreePillars } from '@/components/intro/ThreePillars';
@@ -9,23 +8,12 @@ import { DimensionSection } from '@/components/intro/DimensionSection';
 import { CTAButton } from '@/components/intro/CTAButton';
 
 interface DanKoeIntroProps {
-  onClose: () => void;
   onStartAssessment: (initialInput?: string) => void;
 }
 
-export default function DanKoeIntro({ onClose, onStartAssessment }: DanKoeIntroProps) {
+export default function DanKoeIntro({ onStartAssessment }: DanKoeIntroProps) {
   return (
     <div style={introStyles.container}>
-      {/* Header */}
-      <div style={introStyles.header}>
-        <button onClick={onClose}>
-          <X
-            className="w-6 h-6"
-            style={{ color: introStyles.closeButton.color }}
-          />
-        </button>
-      </div>
-
       {/* Content */}
       <div
         style={{
