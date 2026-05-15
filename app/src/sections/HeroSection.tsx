@@ -89,7 +89,7 @@ export default function HeroSection({
       {showVersionSelector && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
           <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-end items-center mb-6">
               <button
                 onClick={() => setShowVersionSelector(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -122,13 +122,15 @@ export default function HeroSection({
                 </div>
               </div>
 
-              <button
-                onClick={handlePayWithPayPal}
-                className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
-                style={{ background: '#FF6B00' }}
-              >
-                支付
-              </button>
+              <div className="flex justify-center">
+                <button
+                  onClick={handlePayWithPayPal}
+                  className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
+                  style={{ background: '#FF6B00' }}
+                >
+                  支付
+                </button>
+              </div>
             </div>
 
             <button
