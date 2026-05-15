@@ -1,7 +1,7 @@
 /**
  * Human3.0 框架介绍页面
  */
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, Eye, Target, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BG = '#FDF6E3';
@@ -18,11 +18,8 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
-            <span className="text-xs font-bold" style={{ color: BG }}>H</span>
-          </div>
-          <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0</span>
+        <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
+          <span className="text-xs font-bold" style={{ color: BG }}>H</span>
         </div>
         <button
           onClick={onClose}
@@ -53,9 +50,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: `${ACCENT}15` }}>
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke={TEXT} strokeWidth={1.5}>
-                    <path d="M15 12a2 2 2 8v10H7m-4v2a-2-2h3c6.8 3.6 3.6a-2 2h-3c6.8-3.6c6.8-3a-2-2-5m0 0-3.6l2 3.6v2-2a-2 2.8v-2a-2 2h-12m0-1.6 3.6 3.6-3.6-3.6a-2 2h-3c6.8-3.6 3.6a-2 2-5" />
-                  </svg>
+                  <Eye className="w-8 h-8" style={{ color: TEXT }} />
                 </div>
                 <h3 className="font-semibold mb-2" style={{ color: TEXT }}>Vision</h3>
                 <p className="text-xs" style={{ color: TEXT_MUTED }}>愿景</p>
@@ -68,9 +63,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
 
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: `${ACCENT}15` }}>
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke={TEXT} strokeWidth={1.5}>
-                    <path d="M2 12l4 4-4h12l-4 4h12l4-4M6 6l-4-4h12M10 12a4 4 4H4" />
-                  </svg>
+                  <Target className="w-8 h-8" style={{ color: TEXT }} />
                 </div>
                 <h3 className="font-semibold mb-2" style={{ color: TEXT }}>Clarity</h3>
                 <p className="text-xs" style={{ color: TEXT_MUTED }}>清晰度</p>
@@ -83,9 +76,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: {
 
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: `${ACCENT}15` }}>
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke={TEXT} strokeWidth={1.5}>
-                    <path d="M9 12l2 4 4h-4m4-4h4m6 12l-4 4h12l-4-4H18M12 4a4 4 4H4" />
-                  </svg>
+                  <User className="w-8 h-8" style={{ color: TEXT }} />
                 </div>
                 <h3 className="font-semibold mb-2" style={{ color: TEXT }}>Identity</h3>
                 <p className="text-xs" style={{ color: TEXT_MUTED }}>身份</p>

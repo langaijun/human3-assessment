@@ -160,7 +160,7 @@ export default function HeroSection({
               <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
                 <p className="mb-4 font-semibold">完整版包含：</p>
                 <div className="text-left space-y-2">
-                  <p>• 20轮深度对话评估（vs 基础版12轮）</p>
+                  <p>• 20轮深度对话评估</p>
                   <p>• 个性化深度分析报告</p>
                   <p>• 详细改进建议和行动方案</p>
                   <p>• 完整版专属功能解锁</p>
