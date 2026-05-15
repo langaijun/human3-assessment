@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { VERSION_FEATURES, PAYMENT } from '@/constants';
-import { useAppStore } from '@/store/useAppStore';
+import { PAYMENT } from '@/constants';
 import DanKoeIntro from './DanKoeIntro';
 
 interface HeroSectionProps {
@@ -17,7 +16,6 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
 }: HeroSectionProps) {
-  const { selectedVersion } = useAppStore();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
@@ -152,14 +150,6 @@ export default function HeroSection({
         }`}
       >
         <div className="w-full max-w-2xl">
-          {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-3 text-center" style={{ color: TEXT }}>
-            {VERSION_FEATURES[selectedVersion].title}
-          </h1>
-          <p className="text-base mb-10 text-center" style={{ color: TEXT_MUTED }}>
-            {VERSION_FEATURES[selectedVersion].description}
-          </p>
-
           {/* Input */}
           <form onSubmit={handleSubmit} className="mb-8">
             <div className="relative">
@@ -167,10 +157,7 @@ export default function HeroSection({
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder={selectedVersion === 'complete'
-                  ? '描述你目前最大的困惑或目标，进行深度分析...'
-                  : '描述你目前最大的困惑或目标...'
-                }
+                placeholder='描述你目前最大的困惑或目标...'
                 disabled={isTransitioning}
                 className="w-full h-12 pl-4 pr-14 rounded-lg text-sm outline-none transition-all disabled:opacity-50"
                 style={{
