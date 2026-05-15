@@ -1,27 +1,11 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Message, AssessmentResult, ChatState } from '@/types';
+import { SIMPLE_PROMPT } from '@/prompts/simplePrompt';
+import { COMPLETE_PROMPT } from '@/prompts/completePrompt';
 
-const SYSTEM_PROMPT = `You are a direct, insightful development assessor specializing in the HUMAN 3.0 model. You conduct adaptive interviews to determine someone's current development across four quadrants, identify their Metatype and Lifestyle Archetype, and provide actionable transformation strategies through a problem-solving lens.
-
-## Instructions
-1. Introduction: Begin with: "Welcome to your HUMAN 3.0 Development Assessment. I'll guide you through questions about four life domains to map your current development and create your personalized growth strategy. I'll be direct but respectful—sometimes the truth stings, but clarity accelerates growth. Let's begin with your Mind quadrant."
-
-2. Adaptive Interview Process: Ask ONE question at a time. After each user response, assess their level across the four quadrants (Mind, Body, Spirit, Vocation). Each quadrant has Levels 1.0 (Conformist), 2.0 (Individualist), 3.0 (Synthesist) and Phases .1 (Dissonance), .2 (Uncertainty), .3 (Discovery).
-
-3. Depth: Ask minimum 3 questions per quadrant, maximum 8. Continue probing until confident in level assessment.
-
-4. Language: Respond in Chinese (Simplified), using the same language as the user.
-
-5. Completion: When you have gathered enough information (after ~12-20 exchanges), include the tag [ASSESSMENT_COMPLETE] in your response. Then provide a brief transition message before the final report.
-
-6. Be direct, insightful, and push the user toward growth. No sugarcoating. Frame everything through problem-solving lens.
-
-7. Key features to detect:
-   - False transformations (knowledge without implementation)
-   - Active channels (obsessive focus periods)
-   - Regression patterns
-   - Glitch usage (AI, psychedelics, etc.)
-   - Cross-quadrant blocking patterns`;
+interface DeepSeekChatOptions {
+  useCompletePrompt?: boolean;
+}
 
 function parseAssessmentResult(content: string): AssessmentResult | null {
   try {
@@ -35,7 +19,7 @@ function parseAssessmentResult(content: string): AssessmentResult | null {
   }
 }
 
-export function useDeepSeekChat() {
+export function useDeepSeekChat(options: DeepSeekChatOptions = {}) {
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -43,6 +27,8 @@ export function useDeepSeekChat() {
     result: null,
   });
   const abortRef = useRef<AbortController | null>(null);
+
+  const systemPrompt = options.useCompletePrompt ? COMPLETE_PROMPT : SIMPLE_PROMPT;
 
   const sendMessage = useCallback(async (userContent: string) => {
     if (abortRef.current) abortRef.current.abort();
@@ -63,7 +49,7 @@ export function useDeepSeekChat() {
 
     try {
       const allMessages = [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt },
         ...state.messages.map(m => ({ role: m.role, content: m.content })),
         { role: 'user', content: userContent },
       ];
@@ -145,7 +131,7 @@ export function useDeepSeekChat() {
       if (error instanceof Error && error.name === 'AbortError') return;
       await simulateResponse(userContent, setState);
     }
-  }, [state.messages]);
+  }, [state.messages, systemPrompt]);
 
   const resetChat = useCallback(() => {
     if (abortRef.current) abortRef.current.abort();
@@ -220,9 +206,7 @@ function getSimulatedResponses(userContent: string): string[] {
   }
 
   return [
-    `欢迎来到你的 HUMAN 3.0 发展评估。我将引导你了解四个生命维度，绘制你当前的发展图景，并为你创建个性化的成长策略。我会直接但尊重——有时候真相会刺痛，但清晰能加速成长。
-
-让我们从你的**心智（Mind）维度**开始。
+    `欢迎来到你的 HUMAN 3.0 发展评估。我将引导你了解四个生命维度，绘制你当前的发展图景，并为你创建个性化的成长策略。我会直接但尊重——有时候真相会刺痛，但清晰能加速成长。让我们从你的**心智（Mind）维度**开始。
 
 **当你遇到一个与你世界观相悖的观点时，你的第一反应是什么？**
 

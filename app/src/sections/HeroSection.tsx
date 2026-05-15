@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
-import type { AppVersion } from '@/types/version';
-import { VERSION_FEATURES } from '@/constants';
+import { VERSION_FEATURES, PAYMENT } from '@/constants';
+import { useAppStore } from '@/store/useAppStore';
 import DanKoeIntro from './DanKoeIntro';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput?: string) => void;
-  selectedVersion: AppVersion;
 }
 
 const BG = '#FDF6E3';
@@ -17,8 +16,8 @@ const TEXT_MUTED = '#8C7E6A';
 
 export default function HeroSection({
   onStartAssessment,
-  selectedVersion,
 }: HeroSectionProps) {
+  const { selectedVersion } = useAppStore();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
@@ -33,48 +32,9 @@ export default function HeroSection({
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
 
-  const handlePayWithPayPal = useCallback(async () => {
-    const csrfToken = Math.random().toString(36).substring(2, 15) +
-                      Math.random().toString(36).substring(2, 15);
-    document.cookie = `csrf-token=${csrfToken}; path=/; max-age=3600`;
-
-    try {
-      // 创建订单
-      const response = await fetch('/api/paypal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: 5,
-          currency: 'USD',
-          csrfToken
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert('支付失败：' + (data.error || '未知错误'));
-        return;
-      }
-
-      // 后台自动捕获支付
-      const captureResponse = await fetch('/api/paypal', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: data.orderId, csrfToken }),
-      });
-
-      const captureData = await captureResponse.json();
-
-      if (captureResponse.ok) {
-        alert('支付成功！');
-        setShowVersionSelector(false);
-      } else {
-        alert('支付处理失败：' + (captureData.error || '未知错误'));
-      }
-    } catch (error) {
-      alert('支付出错：' + (error instanceof Error ? error.message : '未知错误'));
-    }
+  const handlePayWithPayPal = useCallback(() => {
+    window.open(PAYMENT.PAYPAL_LINK, '_blank');
+    setShowVersionSelector(false);
   }, []);
 
   return (

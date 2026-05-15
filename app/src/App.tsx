@@ -1,11 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { AssessmentResult, AppPhase } from '@/types';
-import type { AppVersion } from '@/types/version';
 import HeroSection from '@/sections/HeroSection';
 import AssessmentInterface from '@/sections/AssessmentInterface';
 import MetatypeCanvas from '@/sections/MetatypeCanvas';
 import ReportPage from '@/sections/ReportPage';
-import { usePersistentVersionState } from '@/hooks/usePersistentVersionState';
 
 const BG_COLOR = '#FDF6E3';
 
@@ -13,15 +11,6 @@ function App() {
   const [phase, setPhase] = useState<AppPhase>('hero');
   const [initialInput, setInitialInput] = useState('');
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
-  const [selectedVersion, setSelectedVersion] = useState<AppVersion>('simple');
-
-  const { versionState, isLoaded } = usePersistentVersionState();
-
-  useEffect(() => {
-    if (isLoaded && versionState?.selectedVersion) {
-      setSelectedVersion(versionState.selectedVersion);
-    }
-  }, [isLoaded, versionState?.selectedVersion]);
 
   const handleStartAssessment = useCallback((input?: string) => {
     if (input) {
@@ -39,12 +28,10 @@ function App() {
     setPhase('report');
   }, []);
 
-
   const handleRestart = useCallback(() => {
     setPhase('hero');
     setInitialInput('');
     setAssessmentResult(null);
-    setSelectedVersion('simple');
   }, []);
 
   return (
@@ -52,7 +39,6 @@ function App() {
       {phase === 'hero' && (
         <HeroSection
           onStartAssessment={handleStartAssessment}
-          selectedVersion={selectedVersion}
         />
       )}
 

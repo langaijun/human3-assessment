@@ -56,6 +56,7 @@ export const PAYMENT = {
   COMPLETE: 5,
   MAX_RETRIES: 3,
   RETRY_DELAY_BASE: 1000,
+  PAYPAL_LINK: import.meta.env.VITE_PAYPAL_PAYMENT_LINK || 'https://www.paypal.com/ncp/payment/LMNRNT3SAXPZS',
 } as const;
 
 // 本地存储键名

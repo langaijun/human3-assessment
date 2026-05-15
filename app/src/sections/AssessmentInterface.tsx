@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, Loader2, User, Bot } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
+import { useAppStore } from '@/store/useAppStore';
 import { UpgradeButton } from '@/components/UpgradeButton';
 import type { AssessmentResult } from '@/types';
 
@@ -121,6 +122,15 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [handleSubmit]);
 
   const maxRounds = isPaid ? 20 : 12;
+
+  // 监听 localStorage 支付状态变化
+  const { selectedVersion, isPaid: storeIsPaid } = useAppStore();
+  useEffect(() => {
+    if (storeIsPaid && selectedVersion === 'complete' && !isPaid) {
+      // 重新加载页面以应用新状态
+      window.location.reload();
+    }
+  }, [storeIsPaid, selectedVersion]);
 
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>

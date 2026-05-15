@@ -2,7 +2,7 @@
  * Human3.0 系统版本相关的 AI 对话 Hook
  */
 import { useState, useCallback } from 'react';
-import { useVersion } from '@/context/VersionContext';
+import { useAppStore } from '@/store/useAppStore';
 import { useDeepSeekChat } from '@/hooks/useDeepSeekChat';
 
 interface VersionChatOptions {
@@ -12,17 +12,16 @@ interface VersionChatOptions {
 }
 
 export function useVersionChat(options: VersionChatOptions = {}) {
-  const { state } = useVersion();
+  const { selectedVersion, isPaid } = useAppStore();
   const [chatEnabled, setChatEnabled] = useState(false);
 
-  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat();
+  const useCompletePrompt = isPaid && selectedVersion === 'complete';
+  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ useCompletePrompt });
 
   const handleStartAssessment = useCallback((input: string) => {
     setChatEnabled(true);
     sendMessage(input);
   }, [sendMessage]);
-
-  const isPaid = state.isPaid && state.selectedVersion === 'complete';
 
   const handleChatComplete = useCallback((finalResult: unknown) => {
     if (options.onComplete) {
@@ -36,7 +35,7 @@ export function useVersionChat(options: VersionChatOptions = {}) {
     isComplete,
     result,
     chatEnabled,
-    isPaid,
+    isPaid: isPaid && selectedVersion === 'complete',
     sendMessage,
     handleStartAssessment,
     handleChatComplete,
