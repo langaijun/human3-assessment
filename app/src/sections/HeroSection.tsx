@@ -110,7 +110,7 @@ export default function HeroSection({
               <div className="text-center mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 1h12a2-6l-7.07 1 4 82a2-6.3l.5 12a-2-5.12a-3.18l-5.64l-3.025-1.6.06l-6.34-3.06l-6.34" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H6a1 1 0 00-1 1z" />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>解锁完整功能</h3>
