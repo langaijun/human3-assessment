@@ -1,19 +1,26 @@
 /**
  * Human3.0 框架介绍页面 - 重构版
  */
+import { ArrowLeft } from 'lucide-react';
 import { introStyles } from '@/styles/introStyles';
-import { spacing } from '@/styles/tokens';
+import { spacing, colors } from '@/styles/tokens';
 import { ThreePillars } from '@/components/intro/ThreePillars';
 import { DimensionSection } from '@/components/intro/DimensionSection';
-import { CTAButton } from '@/components/intro/CTAButton';
 
 interface DanKoeIntroProps {
-  onStartAssessment: (initialInput?: string) => void;
+  onClose: () => void;
 }
 
-export default function DanKoeIntro({ onStartAssessment }: DanKoeIntroProps) {
+export default function DanKoeIntro({ onClose }: DanKoeIntroProps) {
   return (
     <div style={introStyles.container}>
+      {/* Header with back button */}
+      <div style={introStyles.header}>
+        <button onClick={onClose} className="p-1">
+          <ArrowLeft className="w-6 h-6" style={{ color: colors.text }} />
+        </button>
+      </div>
+
       {/* Content */}
       <div
         style={{
@@ -27,11 +34,10 @@ export default function DanKoeIntro({ onStartAssessment }: DanKoeIntroProps) {
             maxWidth: '48rem',
             margin: '0 auto',
             paddingBottom: `${spacing.md}px`,
-            ...introStyles.titleSection,
           }}
         >
           {/* Title */}
-          <div style={{ ...introStyles.titleSection, textAlign: 'center' as const }}>
+          <div style={{ textAlign: 'center' as const, marginBottom: `${spacing.xl}px` }}>
             <h1 style={introStyles.title}>
               思想框架
             </h1>
@@ -45,11 +51,6 @@ export default function DanKoeIntro({ onStartAssessment }: DanKoeIntroProps) {
 
           {/* Assessment Dimensions */}
           <DimensionSection />
-
-          {/* CTA */}
-          <div style={{ textAlign: 'center', marginTop: `${spacing.xl}px` }}>
-            <CTAButton onClick={() => onStartAssessment?.()} />
-          </div>
         </div>
       </div>
     </div>
