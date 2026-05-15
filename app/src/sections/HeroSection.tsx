@@ -73,7 +73,7 @@ export default function HeroSection({
               color: TEXT_MUTED,
             }}
           >
-            <span>完整版</span>
+            <span>升级</span>
           </button>
         </div>
       </nav>
@@ -91,13 +91,13 @@ export default function HeroSection({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
           <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>升级到完整版</h2>
+              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>解锁完整功能</h2>
               <button
                 onClick={() => setShowVersionSelector(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6L18 6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
             </div>
@@ -113,12 +113,12 @@ export default function HeroSection({
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 1h12a2-6l-7.07 1 4 82a2-6.3l.5 12a-2-5.12a-3.18l-5.64l-3.025-1.6.06l-6.34-3.06l-6.34" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>完整版</h3>
-                <p className="text-gray-600">一次性付费 · 永久享有完整版功能</p>
+                <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>解锁完整功能</h3>
+                <p className="text-gray-600">一次性付费 · 永久享有所有功能</p>
               </div>
 
               <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
-                <p className="mb-4 font-semibold">完整版包含：</p>
+                <p className="mb-4 font-semibold">包含功能：</p>
                 <div className="text-left space-y-2">
                   <p>• 20轮深度对话评估</p>
                   <p>• 个性化深度分析报告</p>

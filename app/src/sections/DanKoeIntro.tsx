@@ -18,9 +18,6 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: DanKoeIntroP
     <div style={introStyles.container}>
       {/* Header */}
       <div style={introStyles.header}>
-        <div style={introStyles.logo}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: introStyles.container.backgroundColor }}>H</span>
-        </div>
         <button onClick={onClose}>
           <X
             className="w-6 h-6"
