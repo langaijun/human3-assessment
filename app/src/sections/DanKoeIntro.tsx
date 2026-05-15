@@ -3,9 +3,10 @@
  */
 import { X } from 'lucide-react';
 import { introStyles } from '@/styles/introStyles';
-import ThreePillars from '@/components/intro/ThreePillars';
-import DimensionSection from '@/components/intro/DimensionSection';
-import CTAButton from '@/components/intro/CTAButton';
+import { spacing } from '@/styles/tokens';
+import { ThreePillars } from '@/components/intro/ThreePillars';
+import { DimensionSection } from '@/components/intro/DimensionSection';
+import { CTAButton } from '@/components/intro/CTAButton';
 
 interface DanKoeIntroProps {
   onClose: () => void;
@@ -32,7 +33,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: DanKoeIntroP
       <div
         style={{
           flex: 1,
-          padding: `${introStyles.spacing.md}px ${introStyles.spacing.md}px`,
+          padding: `${spacing.md}px ${spacing.md}px`,
           overflowY: 'auto',
         }}
       >
@@ -40,7 +41,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: DanKoeIntroP
           style={{
             maxWidth: '48rem',
             margin: '0 auto',
-            paddingBottom: `${introStyles.spacing.md}px`,
+            paddingBottom: `${spacing.md}px`,
             ...introStyles.titleSection,
           }}
         >
@@ -61,7 +62,7 @@ export default function DanKoeIntro({ onClose, onStartAssessment }: DanKoeIntroP
           <DimensionSection />
 
           {/* CTA */}
-          <div style={{ textAlign: 'center', marginTop: `${introStyles.spacing.xl}px` }}>
+          <div style={{ textAlign: 'center', marginTop: `${spacing.xl}px` }}>
             <CTAButton onClick={() => onStartAssessment?.()} />
           </div>
         </div>

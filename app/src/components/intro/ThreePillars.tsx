@@ -3,19 +3,19 @@
  */
 import { Eye, Target, User } from 'lucide-react';
 import { INTRO_CONTENT } from '@/content/introContent';
-import { colors, spacing, borderRadius, shadows, bg, border } from '@/styles/tokens';
+import { colors, spacing, borderRadius, shadows } from '@/styles/tokens';
 
 export function ThreePillars() {
   return (
-    <div style={{ ...bg, ...spacing.lg, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: `${spacing.lg}px`, marginBottom: `${spacing.xl}px` }}>
+    <div style={{ backgroundColor: colors.background, padding: `${spacing.lg}px`, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: `${spacing.lg}px`, marginBottom: `${spacing.xl}px` }}>
       {INTRO_CONTENT.threePillars.map((pillar) => (
         <div
           key={pillar.id}
           style={{
             padding: `${spacing.lg}px`,
             borderRadius: `${borderRadius.lg}px`,
-            backgroundColor: bg,
-            border: `1px solid ${border}`,
+            backgroundColor: colors.backgroundCard,
+            border: `1px solid ${colors.border}`,
             transition: 'all 0.3s ease',
           }}
           onMouseEnter={(e) => (e.currentTarget as HTMLDivElement).style.cssText = `
@@ -28,7 +28,7 @@ export function ThreePillars() {
           `}
           onMouseLeave={(e) => (e.currentTarget as HTMLDivElement).style.cssText = `
             padding: ${spacing.lg}px;
-            borderRadius: ${borderRadius.lg}px`;
+            borderRadius: ${borderRadius.lg}px;
             backgroundColor: colors.backgroundLight;
             border: 1px solid ${colors.border};
           `}

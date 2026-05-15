@@ -1,13 +1,13 @@
 /**
  * Dan Koe Intro - 四维度评估组件
  */
-import { CheckCircle, Brain, Activity, Heart, Briefcase } from 'lucide-react';
+import { CheckCircle, Brain, Activity, Heart } from 'lucide-react';
 import { INTRO_CONTENT } from '@/content/introContent';
-import { colors, spacing, borderRadius, shadows, bg, border } from '@/styles/tokens';
+import { colors, spacing, borderRadius } from '@/styles/tokens';
 
 export function DimensionSection() {
   return (
-    <div style={{ ...spacing.lg, padding: `${spacing.lg}px`, borderRadius: `${borderRadius.lg}px`, backgroundColor: colors.backgroundLight, border: `1px solid ${border}` }}>
+    <div style={{ padding: `${spacing.lg}px`, borderRadius: `${borderRadius.lg}px`, backgroundColor: colors.backgroundLight, border: `1px solid ${colors.border}` }}>
       <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: colors.text, marginBottom: `${spacing.md}px` }}>
         {INTRO_CONTENT.dimensions.title}
       </h2>

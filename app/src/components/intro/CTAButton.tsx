@@ -3,7 +3,7 @@
  */
 import { ArrowRight } from 'lucide-react';
 import { INTRO_CONTENT } from '@/content/introContent';
-import { colors, spacing, borderRadius, bg, border } from '@/styles/tokens';
+import { colors, spacing, borderRadius } from '@/styles/tokens';
 
 interface CTAButtonProps {
   onClick: () => void;
@@ -18,7 +18,7 @@ export function CTAButton({ onClick }: CTAButtonProps) {
           padding: `${spacing.md}px ${spacing['2xl']}px`,
           borderRadius: `${borderRadius.md}px`,
           backgroundColor: colors.accent,
-          color: bg,
+          color: colors.backgroundLight,
           fontWeight: '600',
           fontSize: '1rem',
           display: 'inline-flex',
