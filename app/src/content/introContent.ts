@@ -30,30 +30,25 @@ export const INTRO_CONTENT = {
   ],
 
   dimensions: {
-    title: '四维度评估',
-    description: '通过评估心智、身体、灵性和职业四个维度，我们帮你：',
+    title: 'Human 3.0 框架',
+    description: 'Dan Koe 提出的个人发展框架，帮助你实现自我转型：',
     items: [
       {
         icon: 'Mind',
-        label: '理解你的思维模式',
+        label: '心智 - 培养清晰的思维和决策能力',
       },
       {
         icon: 'Body',
-        label: '发现你的核心支柱（Vision, Clarity, Identity）',
+        label: '身体 - 建立健康的体能和能量管理',
       },
       {
         icon: 'Target',
-        label: '生成个性化的转型策略和行动计划',
+        label: '灵性 - 找到内在的平静和意义',
       },
       {
         icon: 'CheckCircle',
-        label: '提供持续的改进反馈和成长追踪',
+        label: '职业 - 构建可持续的价值创造体系',
       },
     ],
-  },
-
-  cta: {
-    text: '开始评估',
-    icon: 'ArrowRight',
   },
 };
