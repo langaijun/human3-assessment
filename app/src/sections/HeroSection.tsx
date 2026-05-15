@@ -90,7 +90,6 @@ export default function HeroSection({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
           <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold" style={{ color: TEXT }}>解锁完整功能</h2>
               <button
                 onClick={() => setShowVersionSelector(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -116,21 +115,19 @@ export default function HeroSection({
               </div>
 
               <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
-                <p className="mb-4 font-semibold">包含功能：</p>
                 <div className="text-left space-y-2">
-                  <p>• 20轮深度对话评估</p>
+                  <p>• 最多达20轮深度对话评估</p>
                   <p>• 个性化深度分析报告</p>
                   <p>• 详细改进建议和行动方案</p>
-                  <p>• 完整版专属功能解锁</p>
                 </div>
               </div>
 
               <button
                 onClick={handlePayWithPayPal}
-                className="w-full py-4 rounded-lg font-bold text-white transition-all hover:brightness-95"
+                className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
                 style={{ background: '#FF6B00' }}
               >
-                <span>支付</span>
+                支付
               </button>
             </div>
 

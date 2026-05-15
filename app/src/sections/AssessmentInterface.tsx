@@ -133,7 +133,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [storeIsPaid, selectedVersion]);
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
+    <div className="relative w-full h-screen flex flex-col" style={{ background: BG }}>
       {/* Progress bar */}
       <div className="h-[2px]" style={{ background: '#A89878' }}>
         <div className="h-full transition-all duration-500 ease-out" style={{ width: `${progress}%`, background: '#4CAF50' }} />
