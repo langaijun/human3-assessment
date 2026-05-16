@@ -183,29 +183,31 @@ function getSequentialResponse(userContent: string, currentMessages: Message[]):
   const content = userContent.toLowerCase();
   const assistantCount = currentMessages.filter(m => m.role === 'assistant').length;
 
-  // 特定关键词优先响应
-  if (content.includes('困') || content.includes('stuck') || content.includes('迷茫')) {
-    return `感谢你的坦诚。"被困住"的感觉通常意味着你正处于某个阶段的**Dissonance期**——你已经耗尽了当前阶段的好处，但还不知道该往哪里走。
+  // 特定关键词优先响应（仅在对话前3轮内生效，避免循环）
+  if (assistantCount < 3) {
+    if (content.includes('困') || content.includes('stuck') || content.includes('迷茫')) {
+      return `感谢你的坦诚。"被困住"的感觉通常意味着你正处于某个阶段的**Dissonance期**——你已经耗尽了当前阶段的好处，但还不知道该往哪里走。
 
 让我深入了解一下：当你说"被困住"时，这种感受更多是来自于**外部环境的限制**，还是**内心不知道方向**？
 
 另外，在过去一年中，你有没有尝试过什么方法来打破这种状态？结果如何？`;
-  }
+    }
 
-  if (content.includes('职业') || content.includes('工作') || content.includes('career')) {
-    return `职业困惑往往是其他三个维度问题的**症状**而非**根源**。很多人在工作中感到空虚，实际上是因为灵性维度（关系、意义）或身体维度（能量、健康）出了问题。
+    if (content.includes('职业') || content.includes('工作') || content.includes('career')) {
+      return `职业困惑往往是其他三个维度问题的**症状**而非**根源**。很多人在工作中感到空虚，实际上是因为灵性维度（关系、意义）或身体维度（能量、健康）出了问题。
 
 在我深入询问之前，想先了解你的整体状况：
 
 **身体方面**——你目前的运动习惯、睡眠质量和饮食状况如何？当工作压力大时，你的身体是第一个受到影响的，还是你能保持稳定的状态？`;
-  }
+    }
 
-  if (content.includes('关系') || content.includes('relationship') || content.includes('社交')) {
-    return `关系问题往往能反映出我们内心最深层的模式。在 HUMAN 3.0 模型中，关系属于**Spirit（灵性）维度**——它不仅包括亲密关系，还包括你与家人、朋友、社区以及更大整体的连接。
+    if (content.includes('关系') || content.includes('relationship') || content.includes('社交')) {
+      return `关系问题往往能反映出我们内心最深层的模式。在 HUMAN 3.0 模型中，关系属于**Spirit（灵性）维度**——它不仅包括亲密关系，还包括你与家人、朋友、社区以及更大整体的连接。
 
 我想先了解一下你的**Mind（心智）维度**：当你面对人际冲突时，你的第一反应是什么？是回避、对抗、还是试图理解对方的立场？
 
 你最近一次真正改变了自己某个核心信念是什么时候？`;
+    }
   }
 
   // 基于对话轮数返回序列响应
