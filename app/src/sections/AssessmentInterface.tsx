@@ -83,6 +83,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   const [inputValue, setInputValue] = useState('');
   const hasStartedRef = useRef(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!hasStartedRef.current && initialInput) {
@@ -94,6 +95,9 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+    if (!isLoading && textareaRef.current) {
+      textareaRef.current.focus();
     }
   }, [messages, isLoading]);
 
@@ -112,6 +116,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     const content = inputValue.trim();
     setInputValue('');
     sendMessage(content);
+    setTimeout(() => textareaRef.current?.focus(), 100);
   }, [inputValue, isLoading, sendMessage]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -225,6 +230,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
               style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}
             >
               <textarea
+                ref={textareaRef}
+                id="message-input"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
