@@ -215,7 +215,7 @@ export default function MetatypeCanvas({ result, onComplete }: MetatypeCanvasPro
 
   return (
     <div className="fixed inset-0 z-40 flex flex-col items-center justify-center" style={{ background: BG }}>
-      <div className="text-center mb-8 z-10">
+      <div className="text-center mb-8 z-10 hidden">
         <p className="text-sm mb-2" style={{ color: TEXT_MUTED }}>正在合成你的人格元类型</p>
         <p className="text-base font-medium transition-all duration-500" style={{ color: TEXT }}>
           {currentWord}
