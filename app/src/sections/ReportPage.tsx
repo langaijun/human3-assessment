@@ -285,9 +285,14 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               </div>
             </div>
 
-            <p className="text-sm mb-3" style={{ color: TEXT }}>
-              下一步行动
-            </p>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
+                <Target className="w-4 h-4 text-white" />
+              </div>
+              <p className="text-sm" style={{ color: TEXT }}>
+                下一步行动
+              </p>
+            </div>
 
             <div className="space-y-3">
               {result.nextSteps.slice(0, 3).map((step, i) => (
