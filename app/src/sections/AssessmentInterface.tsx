@@ -197,17 +197,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
         <div className="px-6 py-6" style={{ background: '#FAF3E5' }}>
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: '#8C7E6A' }}>
-                <FileText className="w-8 h-8 text-white" />
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-medium mb-1" style={{ color: TEXT }}>
-                  评估完成
-                </h3>
-                <p className="text-sm" style={{ color: TEXT_MUTED }}>
-                  已收集所有维度信息，生成你的四维评估结果
-                </p>
-              </div>
               <button
                 onClick={handleViewResult}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm transition-all hover:brightness-95"
