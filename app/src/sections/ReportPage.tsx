@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, Target } from 'lucide-react';
+import { Brain, Activity, Heart, Briefcase, RotateCcw, Target } from 'lucide-react';
 import type { AssessmentResult } from '@/types';
 import { PAYMENT } from '@/constants';
 import { useAppStore } from '@/store/useAppStore';
@@ -131,10 +131,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
     setShowPaymentModal(false);
   };
 
-  const scrollToDetails = () => {
-    window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'smooth' });
-  };
-
   const dimensionColors = {
     mind: '#8B7EC8',
     body: '#5A8F5A',
@@ -224,16 +220,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             <ScoreBar label="灵性 Spirit" score={result.dimensionScores.spirit} color={dimensionColors.spirit} />
             <ScoreBar label="职业 Vocation" score={result.dimensionScores.vocation} color={dimensionColors.vocation} />
           </div>
-
-          {/* Scroll hint */}
-          <button
-            onClick={scrollToDetails}
-            className="flex flex-col items-center gap-1.5 mx-auto transition-colors"
-            style={{ color: TEXT_MUTED }}
-          >
-            <span className="text-xs">查看详细分析</span>
-            <ChevronDown className="w-4 h-4 animate-bounce" />
-          </button>
         </div>
       </div>
 
@@ -250,7 +236,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
           <div className="rounded-xl p-6 mb-10" style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
-                <span className="text-2xl font-bold text-white">1</span>
+                <Target className="w-4 h-4 text-white" />
               </div>
               <p className="text-sm" style={{ color: TEXT }}>
                 核心策略
@@ -264,7 +250,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
-                  <span className="text-white text-xs">2</span>
+                  <span className="text-white text-xs">1</span>
                 </div>
                 <p className="text-sm leading-relaxed">
                   具体行动计划：基于你当前的能力和发展阶段，提供可执行的改进方案。
@@ -273,7 +259,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
-                  <span className="text-white text-xs">3</span>
+                  <span className="text-white text-xs">2</span>
                 </div>
                 <p className="text-sm leading-relaxed">
                   习惯重塑：识别并替换阻碍发展的旧习惯模式，建立支持成长的新行为。
@@ -282,7 +268,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
-                  <span className="text-white text-xs">4</span>
+                  <span className="text-white text-xs">3</span>
                 </div>
                 <p className="text-sm leading-relaxed">
                   系统整合：将四个维度的改进方案整合到你的日常生活中，形成一致的生活方式。
@@ -291,7 +277,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
-                  <span className="text-white text-xs">5</span>
+                  <span className="text-white text-xs">4</span>
                 </div>
                 <p className="text-sm leading-relaxed">
                   持续评估：建立定期自我反思的习惯，使用 HUMAN 3.0 框架追踪你的成长。
@@ -299,7 +285,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               </div>
             </div>
 
-            <p className="text-xs uppercase tracking-wider mb-3" style={{ color: TEXT_MUTED }}>
+            <p className="text-sm mb-3" style={{ color: TEXT }}>
               下一步行动
             </p>
 
@@ -307,7 +293,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               {result.nextSteps.slice(0, 3).map((step, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                     style={{ background: '#8C7E6A' }}
                   >
                     <span className="text-white text-xs">{i + 1}</span>
