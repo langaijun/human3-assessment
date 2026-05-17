@@ -21,7 +21,7 @@ function App() {
 
   const handleAssessmentComplete = useCallback((result: AssessmentResult) => {
     setAssessmentResult(result);
-    setPhase('metatype');
+    setPhase('report');
   }, []);
 
   const handleMetatypeComplete = useCallback(() => {
