@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Loader2, User, Bot, FileText, ArrowRight } from 'lucide-react';
+import { Send, User, Bot, FileText, ArrowRight } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
 import { useAppStore } from '@/store/useAppStore';
 import { UpgradeButton } from '@/components/UpgradeButton';
