@@ -130,7 +130,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
   };
 
   const scrollToDetails = () => {
-    containerRef.current?.scrollTo({ top: containerRef.current.clientHeight * 0.6, behavior: 'smooth' });
+    window.scrollTo({ top: window.innerHeight * 0.6, behavior: 'smooth' });
   };
 
   const dimensionColors = {
