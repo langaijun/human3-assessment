@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { VERSION_FEATURES, PAYMENT } from '@/constants';
 import { useAppStore } from '@/store/useAppStore';
 import DanKoeIntro from './DanKoeIntro';
+import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
 
 interface HeroSectionProps {
   onStartAssessment: (initialInput?: string) => void;
@@ -22,6 +23,7 @@ export default function HeroSection({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
   const [showDanKoe, setShowDanKoe] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +84,13 @@ export default function HeroSection({
       {showDanKoe && (
         <DanKoeIntro
           onClose={() => setShowDanKoe(false)}
+        />
+      )}
+
+      {/* Dan Koe Disclaimer */}
+      {showDisclaimer && (
+        <DanKoeDisclaimer
+          onClose={() => setShowDisclaimer(false)}
         />
       )}
 
@@ -219,8 +228,12 @@ export default function HeroSection({
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
             HUMAN 3.0 Development Model · Multidimensional Potential Assessment
           </p>
-          <p className="text-xs" style={{ color: '#8C7E6A' }}>
-            致敬 Dan Koe —— Human 3.0 框架的提出者
+          <p
+            className="text-xs cursor-pointer hover:underline transition-all"
+            style={{ color: '#8C7E6A' }}
+            onClick={() => setShowDisclaimer(true)}
+          >
+            灵感来源于 Dan Koe 的 Human 3.0 框架
           </p>
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
             联系邮箱: <a href="mailto:langaijun@foxmail.com" className="hover:underline">langaijun@foxmail.com</a>

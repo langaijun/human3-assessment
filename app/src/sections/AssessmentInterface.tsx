@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Loader2, User, Bot } from 'lucide-react';
+import { Send, Loader2, User, Bot, FileText, ArrowRight } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
 import { useAppStore } from '@/store/useAppStore';
 import { UpgradeButton } from '@/components/UpgradeButton';
@@ -97,11 +97,11 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     }
   }, [messages, isLoading]);
 
-  useEffect(() => {
-    if (isComplete && result) {
-      setTimeout(() => onComplete(result), 500);
+  const handleViewResult = useCallback(() => {
+    if (result) {
+      onComplete(result);
     }
-  }, [isComplete, result, onComplete]);
+  }, [result, onComplete]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
   const progress = Math.min((assistantCount / (isPaid ? 20 : 12)) * 100, 100);
@@ -189,12 +189,29 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
 
       {/* Complete state */}
       {isComplete && result && (
-        <div className="text-center py-8">
-          <div className="flex items-center justify-center gap-2">
-            <Loader2 className="w-6 h-6 animate-spin" style={{ color: TEXT_MUTED }} />
-            <p className="text-sm" style={{ color: TEXT }}>
-              正在生成你的评估报告...
-            </p>
+        <div className="px-6 py-6" style={{ background: '#FAF3E5' }}>
+          <div className="max-w-2xl mx-auto">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: '#8C7E6A' }}>
+                <FileText className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-medium mb-1" style={{ color: TEXT }}>
+                  评估完成
+                </h3>
+                <p className="text-sm" style={{ color: TEXT_MUTED }}>
+                  已收集所有维度信息，生成你的四维评估结果
+                </p>
+              </div>
+              <button
+                onClick={handleViewResult}
+                className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm transition-all hover:brightness-95"
+                style={{ background: '#8C7E6A', color: '#FFFFFF' }}
+              >
+                <span>查看四维评估结果</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}

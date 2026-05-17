@@ -3,6 +3,7 @@ import { Brain, Activity, Heart, Briefcase, RotateCcw, ChevronDown, Target } fro
 import type { AssessmentResult } from '@/types';
 import { PAYMENT } from '@/constants';
 import { useAppStore } from '@/store/useAppStore';
+import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
 
 const BG = '#FDF6E3';
 const BORDER = '#E8DCC8';
@@ -122,6 +123,7 @@ interface ReportPageProps {
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   const { isPaid } = useAppStore();
 
   const handlePayWithPayPal = () => {
@@ -401,12 +403,22 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
       {/* Footer */}
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-4xl mx-auto flex items-center justify-center">
-          <p className="text-xs text-center" style={{ color: TEXT_MUTED }}>
+        <div className="max-w-4xl mx-auto text-center space-y-2">
+          <p className="text-xs" style={{ color: TEXT_MUTED }}>
             HUMAN 3.0 Development Model · Multidimensional Potential Assessment
+          </p>
+          <p className="text-xs cursor-pointer hover:underline transition-all" style={{ color: '#8C7E6A' }} onClick={() => setShowDisclaimer(true)}>
+            灵感来源于 Dan Koe 的 Human 3.0 框架
           </p>
         </div>
       </footer>
+
+      {/* Dan Koe Disclaimer */}
+      {showDisclaimer && (
+        <DanKoeDisclaimer
+          onClose={() => setShowDisclaimer(false)}
+        />
+      )}
     </div>
   );
 }
