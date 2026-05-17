@@ -4,19 +4,20 @@
 import { useState, useCallback } from 'react';
 import { useAppStore } from '@/store/useAppStore';
 import { useDeepSeekChat } from '@/hooks/useDeepSeekChat';
+import { SIMPLE_PROMPT } from '@/prompts/simplePrompt';
+import { COMPLETE_PROMPT } from '@/prompts/completePrompt';
 
 interface VersionChatOptions {
   onComplete?: (result: unknown) => void;
   maxRounds?: number;
-  systemPromptOverride?: string;
 }
 
 export function useVersionChat(options: VersionChatOptions = {}) {
-  const { selectedVersion, isPaid } = useAppStore();
+  const { isPaid } = useAppStore();
   const [chatEnabled, setChatEnabled] = useState(false);
 
-  const useCompletePrompt = isPaid && selectedVersion === 'complete';
-  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ useCompletePrompt });
+  const systemPrompt = isPaid ? COMPLETE_PROMPT : SIMPLE_PROMPT;
+  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ systemPrompt });
 
   const handleStartAssessment = useCallback((input: string) => {
     setChatEnabled(true);
@@ -35,7 +36,7 @@ export function useVersionChat(options: VersionChatOptions = {}) {
     isComplete,
     result,
     chatEnabled,
-    isPaid: isPaid && selectedVersion === 'complete',
+    isPaid,
     sendMessage,
     handleStartAssessment,
     handleChatComplete,

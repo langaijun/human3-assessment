@@ -1,10 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Message, AssessmentResult, ChatState } from '@/types';
 import { SIMPLE_PROMPT } from '@/prompts/simplePrompt';
-import { COMPLETE_PROMPT } from '@/prompts/completePrompt';
 
 interface DeepSeekChatOptions {
-  useCompletePrompt?: boolean;
+  systemPrompt?: string;
 }
 
 function parseAssessmentResult(content: string): AssessmentResult | null {
@@ -28,7 +27,7 @@ export function useDeepSeekChat(options: DeepSeekChatOptions = {}) {
   });
   const abortRef = useRef<AbortController | null>(null);
 
-  const systemPrompt = options.useCompletePrompt ? COMPLETE_PROMPT : SIMPLE_PROMPT;
+  const systemPrompt = options.systemPrompt || SIMPLE_PROMPT;
 
   const sendMessage = useCallback(async (userContent: string) => {
     if (abortRef.current) abortRef.current.abort();
