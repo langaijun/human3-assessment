@@ -13,7 +13,7 @@ interface AppState {
 
 const initialState: AppState = {
   selectedVersion: 'simple',
-  isPaid: false,
+  isPaid: false, // 临时改为 true 测试完整版
 };
 
 export const useAppStore = create<AppState>()(

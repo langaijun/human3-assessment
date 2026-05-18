@@ -21,6 +21,7 @@ function App() {
 
   const handleAssessmentComplete = useCallback((result: AssessmentResult) => {
     setAssessmentResult(result);
+    // 直接显示报告，跳过 MetatypeCanvas
     setPhase('report');
   }, []);
 

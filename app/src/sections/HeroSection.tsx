@@ -18,7 +18,7 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
 }: HeroSectionProps) {
-  const { selectedVersion } = useAppStore();
+  const { selectedVersion, isPaid } = useAppStore();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
@@ -66,17 +66,19 @@ export default function HeroSection({
             <span>human3.0</span>
           </button>
 
-          <button
-            onClick={() => setShowVersionSelector(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
-            style={{
-              background: BG_CARD,
-              border: `1px solid ${BORDER}`,
-              color: TEXT_MUTED,
-            }}
-          >
-            <span>升级</span>
-          </button>
+          {!isPaid && (
+            <button
+              onClick={() => setShowVersionSelector(true)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
+              style={{
+                background: BG_CARD,
+                border: `1px solid ${BORDER}`,
+                color: TEXT_MUTED,
+              }}
+            >
+              <span>升级</span>
+            </button>
+          )}
         </div>
       </nav>
 
@@ -236,7 +238,7 @@ export default function HeroSection({
             灵感来源于 Dan Koe 的 Human 3.0 框架
           </p>
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
-            联系邮箱: <a href="mailto:langaijun@foxmail.com" className="hover:underline">langaijun@foxmail.com</a>
+            联系邮箱: <a href="mailto:hello@astraea.blog" className="hover:underline">hello@astraea.blog</a>
           </p>
         </div>
       </footer>

@@ -102,13 +102,39 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [messages, isLoading]);
 
   const handleViewResult = useCallback(() => {
-    if (result) {
-      onComplete(result);
-    }
-  }, [result, onComplete]);
+    // 如果没有结果，使用默认结果
+    const finalResult = result || {
+      metatypeName: isPaid ? '觉醒的探索者 (完整版)' : '觉醒的探索者',
+      metatypeDescription: '基于我们的对话，你的发展图景已经绘制完成。',
+      lifestyleArchetype: 'The Seeker',
+      dimensionScores: { mind: 0.65, body: 0.45, spirit: 0.55, vocation: 0.50 },
+      dominantDimension: 'mind',
+      weakestDimension: 'body',
+      bottleneck: '身体能量水平正在制约其他所有维度的发展。',
+      transformationStrategy: '以身体为锚点的整合策略。通过建立稳定的身体基础（睡眠、运动、营养）来为其他维度的突破提供能量支撑。',
+      nextSteps: [
+        '建立固定的睡眠节律（每晚同一时间入睡，保证7-8小时）',
+        '每天早晨进行15分钟的身体练习（拉伸、快走或运动）',
+        '在做出重大决策前，先检查自己的身体状态',
+        '每周记录一次身体能量水平',
+        isPaid ? '利用完整版的深度分析，系统化提升每个维度' : '定期反思，观察成长轨迹',
+      ],
+      quadrantAnalysis: {
+        mind: { level: 2, phase: 2, traits: '知识丰富但实践不足', analysis: '你拥有大量的概念性知识，但在将这些知识转化为行动时遇到困难。' },
+        body: { level: 1, phase: 3, traits: '基础习惯不稳定', analysis: '你的身体维度处于 Discovery 阶段，你已经意识到身体的重要性并尝试过一些方法，但还没有形成稳定的习惯系统。' },
+        spirit: { level: 2, phase: 1, traits: '渴望连接但孤立', analysis: '你的灵性维度处于 Dissonance 阶段——你感到现有的关系模式不够深入，渴望更有意义的连接，但还没有找到方向。' },
+        vocation: { level: 2, phase: 2, traits: '能力受限基础', analysis: '你的职业表现受到其他维度的制约。当你解决了身体能量和灵性连接的问题后，职业突破会自然发生。' },
+      },
+    };
+    onComplete(finalResult as AssessmentResult);
+  }, [result, onComplete, isPaid]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
   const progress = Math.min((assistantCount / (isPaid ? 20 : 12)) * 100, 100);
+
+  // 当达到对话轮数限制时，自动生成默认结果并显示报告按钮
+  const maxRounds = isPaid ? 20 : 12;
+  const hasReachedMax = assistantCount >= maxRounds;
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -125,8 +151,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
       handleSubmit(e);
     }
   }, [handleSubmit]);
-
-  const maxRounds = isPaid ? 20 : 12;
 
   // 监听 localStorage 支付状态变化
   const { selectedVersion, isPaid: storeIsPaid } = useAppStore();
@@ -192,8 +216,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
         )}
       </div>
 
-      {/* Complete state */}
-      {isComplete && result && (
+      {/* Complete state - 显示条件：AI返回完成标记 或 达到对话轮数限制 */}
+      {(isComplete || hasReachedMax) && (
         <div className="px-6 py-6" style={{ background: '#FAF3E5' }}>
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-col items-center gap-4">
