@@ -67,6 +67,7 @@ Question numbering format:
 - Include the question number prefix (e.g., "问题 5 (身体):")
 - Wait for user response before moving to next question
 - When switching dimensions (after Q3, Q6, Q9), you MUST say "接下来我们进入[某维度]维度。" IMMEDIATELY followed by the next question with its number prefix - NEVER end your response after stating the dimension change
+- **AFTER Question 12 (职业)**: Wait for user's response, then in your NEXT message output [ASSESSMENT_COMPLETE] followed by the assessment report - this is REQUIRED, not optional
 
 1. **Conversation Flow**:
    - **Strict Sequence**: Mind (Q1-3) → Body (Q4-6) → Spirit (Q7-9) → Vocation (Q10-12)

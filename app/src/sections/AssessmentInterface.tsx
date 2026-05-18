@@ -130,11 +130,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [result, onComplete, isPaid]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
-  const progress = Math.min((assistantCount / (isPaid ? 20 : 12)) * 100, 100);
-
-  // 当达到对话轮数限制时，自动生成默认结果并显示报告按钮
   const maxRounds = isPaid ? 20 : 12;
-  const hasReachedMax = assistantCount >= maxRounds;
+  const progress = Math.min((assistantCount / maxRounds) * 100, 100);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -216,8 +213,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
         )}
       </div>
 
-      {/* Complete state - 显示条件：AI返回完成标记 或 达到对话轮数限制 */}
-      {(isComplete || hasReachedMax) && (
+      {/* Complete state - 只在 AI 返回完成标记时显示 */}
+      {isComplete && (
         <div className="px-6 py-6" style={{ background: '#FAF3E5' }}>
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-col items-center gap-4">
