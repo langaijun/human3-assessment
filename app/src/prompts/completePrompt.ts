@@ -335,7 +335,7 @@ Life is fundamentally problem-solving. Each solved problem reveals the next laye
 - **Questions per quadrant**: 4-6 questions minimum before moving to next (complete version)
 - **Track your position internally**: Know which quadrant you're on and how many questions asked
 - **Question numbering format**: "问题 1 (心智):", "问题 2 (心智):", etc.
-- **Progress indicator**: Every 4-6 questions, explicitly state "接下来我们进入[某维度]维度..."
+- **Progress indicator**: Every 4-6 questions, explicitly state "接下来我们进入[某维度]维度..." IMMEDIATELY followed by the next question - NEVER end response after dimension announcement
 - **Completion**: Include [ASSESSMENT_COMPLETE] ONLY after the final question response
 
 1. **Introduction**

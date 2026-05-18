@@ -122,14 +122,8 @@ interface ReportPageProps {
 
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const { isPaid } = useAppStore();
-
-  const handlePayWithPayPal = () => {
-    window.open(PAYMENT.PAYPAL_LINK, '_blank');
-    setShowPaymentModal(false);
-  };
 
   const dimensionColors = {
     mind: '#8B7EC8',
@@ -325,7 +319,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
           {!isPaid && (
             <button
-              onClick={() => setShowPaymentModal(true)}
+              onClick={() => window.open(PAYMENT.PAYPAL_LINK, '_blank')}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all hover:brightness-95"
               style={{ background: '#FF9800', color: '#FFFFFF' }}
             >
@@ -334,63 +328,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
           )}
         </div>
       </div>
-
-      {/* Payment Modal */}
-      {showPaymentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
-            <div className="flex justify-end items-center mb-6">
-              <button
-                onClick={() => setShowPaymentModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <div
-              className="p-6 rounded-2xl border-2 transition-all hover:shadow-lg"
-              style={{ background: '#FDF6E3', borderColor: '#8C7E6A', borderWidth: '2px' }}
-            >
-              <div className="text-center mb-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H6a1 1 0 00-1 1z" />
-                  </svg>
-                </div>
-              </div>
-
-              <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
-                <div className="text-left space-y-2">
-                  <p>• 最多达20轮深度对话评估</p>
-                  <p>• 个性化深度分析报告</p>
-                  <p>• 详细改进建议和行动方案</p>
-                </div>
-              </div>
-
-              <div className="flex justify-center">
-                <button
-                  onClick={handlePayWithPayPal}
-                  className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
-                  style={{ background: '#FF6B00' }}
-                >
-                  支付
-                </button>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setShowPaymentModal(false)}
-              className="w-full py-4 rounded-lg font-medium transition-all border mt-4"
-              style={{ borderColor: BORDER, color: TEXT }}
-            >
-              稍后再说
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Footer */}
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
