@@ -243,7 +243,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               </p>
             </div>
 
-            <p className="leading-relaxed mb-4" style={{ color: '#4A4035' }}>
+            <p className="leading-relaxed mb-2" style={{ color: '#4A4035' }}>
               {result.transformationStrategy}
             </p>
 
@@ -285,7 +285,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-8 mb-3">
+            <div className="flex items-center gap-2 mt-10 mb-3">
               <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: '#8C7E6A' }}>
                 <Target className="w-4 h-4 text-white" />
               </div>
