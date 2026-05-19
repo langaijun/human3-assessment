@@ -1,10 +1,14 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Message, AssessmentResult, ChatState } from '@/types';
 import { SIMPLE_PROMPT } from '@/prompts/simplePrompt';
 
 interface DeepSeekChatOptions {
   systemPrompt?: string;
+  version?: 'simple' | 'complete'; // 用于区分不同版本的对话
 }
+
+// localStorage key 前缀
+const STORAGE_PREFIX = 'human3-chat-';
 
 function parseAssessmentResult(content: string): AssessmentResult | null {
   try {
@@ -19,14 +23,46 @@ function parseAssessmentResult(content: string): AssessmentResult | null {
 }
 
 export function useDeepSeekChat(options: DeepSeekChatOptions = {}) {
-  const [state, setState] = useState<ChatState>({
-    messages: [],
-    isLoading: false,
-    isComplete: false,
-    result: null,
-  });
-  const abortRef = useRef<AbortController | null>(null);
+  const storageKey = `${STORAGE_PREFIX}${options.version || 'simple'}`;
 
+  // 初始化时从 localStorage 恢复
+  const [state, setState] = useState<ChatState>(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          messages: parsed.messages || [],
+          isLoading: false,
+          isComplete: parsed.isComplete || false,
+          result: parsed.result || null,
+        };
+      }
+    } catch {
+      // 解析失败，使用默认值
+    }
+    return {
+      messages: [],
+      isLoading: false,
+      isComplete: false,
+      result: null,
+    };
+  });
+
+  // 保存到 localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        messages: state.messages,
+        isComplete: state.isComplete,
+        result: state.result,
+      }));
+    } catch {
+      // 保存失败，忽略
+    }
+  }, [storageKey, state.messages, state.isComplete, state.result]);
+
+  const abortRef = useRef<AbortController | null>(null);
   const systemPrompt = options.systemPrompt || SIMPLE_PROMPT;
 
   const sendMessage = useCallback(async (userContent: string) => {
@@ -135,7 +171,8 @@ export function useDeepSeekChat(options: DeepSeekChatOptions = {}) {
   const resetChat = useCallback(() => {
     if (abortRef.current) abortRef.current.abort();
     setState({ messages: [], isLoading: false, isComplete: false, result: null });
-  }, []);
+    localStorage.removeItem(storageKey);
+  }, [storageKey]);
 
   return { ...state, sendMessage, resetChat };
 }

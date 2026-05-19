@@ -9,19 +9,32 @@ export type AppVersion = 'simple' | 'complete';
 interface AppState {
   selectedVersion: AppVersion;
   isPaid: boolean;
+  hasUsedComplete: boolean; // 完整版是否已使用
+  setSelectedVersion: (version: AppVersion) => void;
+  setPaid: (paid: boolean) => void;
+  setHasUsedComplete: (used: boolean) => void;
+  toggleVersion: () => void;
 }
 
-const initialState: AppState = {
+interface AppStateState {
+  selectedVersion: AppVersion;
+  isPaid: boolean;
+  hasUsedComplete: boolean; // 完整版是否已使用
+}
+
+const initialState: AppStateState = {
   selectedVersion: 'simple',
-  isPaid: false, // 临时改为 true 测试完整版
+  isPaid: false,
+  hasUsedComplete: false,
 };
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set): AppState => ({
       ...initialState,
       setSelectedVersion: (version: AppVersion) => set({ selectedVersion: version }),
       setPaid: (paid: boolean) => set({ isPaid: paid }),
+      setHasUsedComplete: (used: boolean) => set({ hasUsedComplete: used }),
       toggleVersion: () => set((state) => ({
         selectedVersion: state.selectedVersion === 'simple' ? 'complete' : 'simple',
         isPaid: false, // 切换版本时重置付费状态

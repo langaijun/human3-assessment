@@ -18,21 +18,29 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
 }: HeroSectionProps) {
-  const { selectedVersion, isPaid } = useAppStore();
+  const { selectedVersion, isPaid, hasUsedComplete, setHasUsedComplete, setPaid } = useAppStore();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVersionSelector, setShowVersionSelector] = useState(false);
   const [showDanKoe, setShowDanKoe] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showPaymentRequired, setShowPaymentRequired] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isTransitioning) return;
+
+    // 完整版已使用，需要重新付费
+    if (selectedVersion === 'complete' && hasUsedComplete) {
+      setShowPaymentRequired(true);
+      return;
+    }
+
     setIsTransitioning(true);
     setTimeout(() => {
       onStartAssessment(inputValue.trim());
     }, 500);
-  }, [inputValue, isTransitioning, onStartAssessment]);
+  }, [inputValue, isTransitioning, onStartAssessment, selectedVersion, hasUsedComplete]);
 
   const handlePayWithPayPal = useCallback(() => {
     window.open(PAYMENT.PAYPAL_LINK, '_blank');
@@ -96,6 +104,58 @@ export default function HeroSection({
         />
       )}
 
+      {/* Payment Required Modal */}
+      {showPaymentRequired && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-auto">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold mb-2" style={{ color: TEXT }}>需要重新付费</h3>
+              <p className="text-sm" style={{ color: TEXT_MUTED }}>
+                您的完整版测评次数已使用完毕，重新付费后可再次使用。
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  window.open(PAYMENT.PAYPAL_LINK, '_blank');
+                  setShowPaymentRequired(false);
+                }}
+                className="w-full py-3 rounded-lg font-bold text-white transition-all hover:brightness-95"
+                style={{ background: '#FF6B00' }}
+              >
+                支付 $5 继续
+              </button>
+
+              <button
+                onClick={() => {
+                  // 切换到简单版
+                  setPaid(false);
+                  setShowPaymentRequired(false);
+                }}
+                className="w-full py-3 rounded-lg font-medium transition-all border"
+                style={{ borderColor: BORDER, color: TEXT }}
+              >
+                切换到免费简单版
+              </button>
+
+              <button
+                onClick={() => setShowPaymentRequired(false)}
+                className="w-full py-3 rounded-lg text-sm transition-all"
+                style={{ color: TEXT_MUTED }}
+              >
+                稍后再说
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Version Selector Modal - simplified with payment only */}
       {showVersionSelector && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
@@ -133,13 +193,24 @@ export default function HeroSection({
                 </div>
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center gap-2">
                 <button
                   onClick={handlePayWithPayPal}
                   className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
                   style={{ background: '#FF6B00' }}
                 >
-                  支付
+                  支付 $5
+                </button>
+                <button
+                  onClick={() => {
+                    setPaid(true);
+                    setHasUsedComplete(false);
+                    setShowVersionSelector(false);
+                  }}
+                  className="px-4 py-2 rounded font-medium text-white transition-all hover:brightness-95"
+                  style={{ background: '#4CAF50' }}
+                >
+                  已完成支付
                 </button>
               </div>
             </div>

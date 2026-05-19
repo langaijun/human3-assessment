@@ -79,6 +79,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     sendMessage,
     isPaid
   } = useVersionChat();
+  const { setHasUsedComplete } = useAppStore();
 
   const [inputValue, setInputValue] = useState('');
   const hasStartedRef = useRef(false);
@@ -102,6 +103,11 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [messages, isLoading]);
 
   const handleViewResult = useCallback(() => {
+    // 完整版完成评估后标记为已使用
+    if (isPaid) {
+      setHasUsedComplete(true);
+    }
+
     // 如果没有结果，使用默认结果
     const finalResult = result || {
       metatypeName: isPaid ? '觉醒的探索者 (完整版)' : '觉醒的探索者',

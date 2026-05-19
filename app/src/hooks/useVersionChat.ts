@@ -16,8 +16,9 @@ export function useVersionChat(options: VersionChatOptions = {}) {
   const { isPaid } = useAppStore();
   const [chatEnabled, setChatEnabled] = useState(false);
 
+  const version: 'simple' | 'complete' = isPaid ? 'complete' : 'simple';
   const systemPrompt = isPaid ? COMPLETE_PROMPT : SIMPLE_PROMPT;
-  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ systemPrompt });
+  const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ systemPrompt, version });
 
   const handleStartAssessment = useCallback((input: string) => {
     setChatEnabled(true);
