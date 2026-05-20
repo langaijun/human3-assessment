@@ -127,10 +127,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     onComplete(finalResult as AssessmentResult);
   }, [result, onComplete, version]);
 
-  const assistantCount = messages.filter(m => m.role === 'assistant').length;
-  const maxRounds = version === 'complete' ? 20 : 12;
-  const progress = Math.min((assistantCount / maxRounds) * 100, 100);
-
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
@@ -149,11 +145,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
 
   return (
     <div className="relative w-full h-screen flex flex-col" style={{ background: BG }}>
-      {/* Progress bar */}
-      <div className="h-[2px]" style={{ background: '#A89878' }}>
-        <div className="h-full transition-all duration-500 ease-out" style={{ width: `${progress}%`, background: '#4CAF50' }} />
-      </div>
-
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="flex items-center gap-2">
@@ -161,10 +152,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
           <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
-        </div>
-
-        <div className="text-xs" style={{ color: TEXT_MUTED }}>
-          {assistantCount}/{maxRounds} 轮对话
         </div>
       </div>
 
