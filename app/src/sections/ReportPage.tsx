@@ -327,11 +327,8 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
               <Heart className="w-6 h-6" style={{ color: '#FF9800' }} />
             </div>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: TEXT }}>
-              赞助支持我们
-            </h3>
             <p className="text-sm mb-4 leading-relaxed" style={{ color: TEXT_MUTED }}>
-              如果你觉得这个评估对你有帮助，可以考虑赞助支持我们的继续开发。
+              觉得评估对你有帮助，感谢平台。
             </p>
             <button
               onClick={() => window.open(PAYMENT.PAYPAL_LINK, '_blank')}
