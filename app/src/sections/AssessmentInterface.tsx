@@ -127,6 +127,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     onComplete(finalResult as AssessmentResult);
   }, [result, onComplete, version]);
 
+  const assistantCount = messages.filter(m => m.role === 'assistant').length;
+
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
@@ -152,6 +154,9 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
           <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
+        </div>
+        <div className="text-xs" style={{ color: TEXT_MUTED }}>
+          {assistantCount} 轮对话
         </div>
       </div>
 

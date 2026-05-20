@@ -26,7 +26,7 @@ export const VERSION_FEATURES = {
   simple: {
     id: 'simple',
     title: '快速评估',
-    description: '12轮对话，快速了解自己',
+    description: '快速了解自己',
     features: [
       '快速评估',
       '基础报告',
@@ -37,7 +37,7 @@ export const VERSION_FEATURES = {
   complete: {
     id: 'complete',
     title: '深度评估',
-    description: '20轮对话，详细探索成长',
+    description: '详细探索成长',
     features: [
       '完整评估',
       '深度分析',
