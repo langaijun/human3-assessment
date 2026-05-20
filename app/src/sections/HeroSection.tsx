@@ -108,10 +108,10 @@ export default function HeroSection({
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-3 text-center" style={{ color: TEXT }}>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center" style={{ color: TEXT }}>
             Human3.0
           </h1>
-          <p className="text-base mb-10 text-center" style={{ color: TEXT_MUTED }}>
+          <p className="text-base my-8 text-center" style={{ color: TEXT_MUTED }}>
             {VERSION_FEATURES[selectedVersion].description}
           </p>
 
