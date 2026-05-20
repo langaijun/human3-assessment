@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, User, Bot, ArrowRight } from 'lucide-react';
 import { useVersionChat } from '@/hooks/useVersionChat';
-import { useAppStore } from '@/store/useAppStore';
-import { UpgradeButton } from '@/components/UpgradeButton';
 import type { AssessmentResult } from '@/types';
 
 const BG = '#FDF6E3';
@@ -77,9 +75,8 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     isComplete,
     result,
     sendMessage,
-    isPaid
+    version
   } = useVersionChat();
-  const { setHasUsedComplete } = useAppStore();
 
   const [inputValue, setInputValue] = useState('');
   const hasStartedRef = useRef(false);
@@ -103,14 +100,9 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [messages, isLoading]);
 
   const handleViewResult = useCallback(() => {
-    // 完整版完成评估后标记为已使用
-    if (isPaid) {
-      setHasUsedComplete(true);
-    }
-
     // 如果没有结果，使用默认结果
     const finalResult = result || {
-      metatypeName: isPaid ? '觉醒的探索者 (完整版)' : '觉醒的探索者',
+      metatypeName: '觉醒的探索者',
       metatypeDescription: '基于我们的对话，你的发展图景已经绘制完成。',
       lifestyleArchetype: 'The Seeker',
       dimensionScores: { mind: 0.65, body: 0.45, spirit: 0.55, vocation: 0.50 },
@@ -123,7 +115,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
         '每天早晨进行15分钟的身体练习（拉伸、快走或运动）',
         '在做出重大决策前，先检查自己的身体状态',
         '每周记录一次身体能量水平',
-        isPaid ? '利用完整版的深度分析，系统化提升每个维度' : '定期反思，观察成长轨迹',
+        version === 'complete' ? '利用完整版的深度分析，系统化提升每个维度' : '定期反思，观察成长轨迹',
       ],
       quadrantAnalysis: {
         mind: { level: 2, phase: 2, traits: '知识丰富但实践不足', analysis: '你拥有大量的概念性知识，但在将这些知识转化为行动时遇到困难。' },
@@ -133,10 +125,10 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
       },
     };
     onComplete(finalResult as AssessmentResult);
-  }, [result, onComplete, isPaid]);
+  }, [result, onComplete, version]);
 
   const assistantCount = messages.filter(m => m.role === 'assistant').length;
-  const maxRounds = isPaid ? 20 : 12;
+  const maxRounds = version === 'complete' ? 20 : 12;
   const progress = Math.min((assistantCount / maxRounds) * 100, 100);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -155,15 +147,6 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
     }
   }, [handleSubmit]);
 
-  // 监听 localStorage 支付状态变化
-  const { selectedVersion, isPaid: storeIsPaid } = useAppStore();
-  useEffect(() => {
-    if (storeIsPaid && selectedVersion === 'complete' && !isPaid) {
-      // 重新加载页面以应用新状态
-      window.location.reload();
-    }
-  }, [storeIsPaid, selectedVersion]);
-
   return (
     <div className="relative w-full h-screen flex flex-col" style={{ background: BG }}>
       {/* Progress bar */}
@@ -177,23 +160,11 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
           <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
-          <div>
-            <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
-            {isPaid && (
-              <span className="ml-2 px-2 py-0.5 rounded-full text-xs" style={{ background: '#FF9800', color: '#FFFFFF' }}>
-                完整版
-              </span>
-            )}
-          </div>
+          <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          {!isPaid && (
-            <UpgradeButton />
-          )}
-          <div className="text-xs" style={{ color: TEXT_MUTED }}>
-            {assistantCount}/{maxRounds} 轮对话
-          </div>
+        <div className="text-xs" style={{ color: TEXT_MUTED }}>
+          {assistantCount}/{maxRounds} 轮对话
         </div>
       </div>
 

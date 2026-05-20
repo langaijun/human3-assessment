@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { VERSION_FEATURES, PAYMENT } from '@/constants';
+import { VERSION_FEATURES } from '@/constants';
 import { useAppStore } from '@/store/useAppStore';
 import DanKoeIntro from './DanKoeIntro';
 import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
@@ -18,34 +18,21 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
 }: HeroSectionProps) {
-  const { selectedVersion, isPaid, hasUsedComplete, setHasUsedComplete, setPaid } = useAppStore();
+  const { selectedVersion, setSelectedVersion } = useAppStore();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showVersionSelector, setShowVersionSelector] = useState(false);
   const [showDanKoe, setShowDanKoe] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const [showPaymentRequired, setShowPaymentRequired] = useState(false);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isTransitioning) return;
 
-    // 完整版已使用，需要重新付费
-    if (selectedVersion === 'complete' && hasUsedComplete) {
-      setShowPaymentRequired(true);
-      return;
-    }
-
     setIsTransitioning(true);
     setTimeout(() => {
       onStartAssessment(inputValue.trim());
     }, 500);
-  }, [inputValue, isTransitioning, onStartAssessment, selectedVersion, hasUsedComplete]);
-
-  const handlePayWithPayPal = useCallback(() => {
-    window.open(PAYMENT.PAYPAL_LINK, '_blank');
-    setShowVersionSelector(false);
-  }, []);
+  }, [inputValue, isTransitioning, onStartAssessment]);
 
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
@@ -58,7 +45,7 @@ export default function HeroSection({
           <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
-          <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0</span>
+          <span className="text-sm font-medium" style={{ color: TEXT }}>uman3.0</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -73,20 +60,6 @@ export default function HeroSection({
           >
             <span>human3.0</span>
           </button>
-
-          {!isPaid && (
-            <button
-              onClick={() => setShowVersionSelector(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:bg-gray-100"
-              style={{
-                background: BG_CARD,
-                border: `1px solid ${BORDER}`,
-                color: TEXT_MUTED,
-              }}
-            >
-              <span>升级</span>
-            </button>
-          )}
         </div>
       </nav>
 
@@ -104,128 +77,6 @@ export default function HeroSection({
         />
       )}
 
-      {/* Payment Required Modal */}
-      {showPaymentRequired && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-auto">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: TEXT }}>需要重新付费</h3>
-              <p className="text-sm" style={{ color: TEXT_MUTED }}>
-                您的完整版测评次数已使用完毕，重新付费后可再次使用。
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <button
-                onClick={() => {
-                  window.open(PAYMENT.PAYPAL_LINK, '_blank');
-                  setShowPaymentRequired(false);
-                }}
-                className="w-full py-3 rounded-lg font-bold text-white transition-all hover:brightness-95"
-                style={{ background: '#FF6B00' }}
-              >
-                支付 $5 继续
-              </button>
-
-              <button
-                onClick={() => {
-                  // 切换到简单版
-                  setPaid(false);
-                  setShowPaymentRequired(false);
-                }}
-                className="w-full py-3 rounded-lg font-medium transition-all border"
-                style={{ borderColor: BORDER, color: TEXT }}
-              >
-                切换到免费简单版
-              </button>
-
-              <button
-                onClick={() => setShowPaymentRequired(false)}
-                className="w-full py-3 rounded-lg text-sm transition-all"
-                style={{ color: TEXT_MUTED }}
-              >
-                稍后再说
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Version Selector Modal - simplified with payment only */}
-      {showVersionSelector && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0, 0, 0, 0.7)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-auto">
-            <div className="flex justify-end items-center mb-6">
-              <button
-                onClick={() => setShowVersionSelector(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Complete Version Card - simplified */}
-            <div
-              className="p-6 rounded-2xl border-2 transition-all hover:shadow-lg"
-              style={{ background: '#FDF6E3', borderColor: '#8C7E6A', borderWidth: '2px' }}
-            >
-              <div className="text-center mb-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v21a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H6a1 1 0 00-1 1z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold mb-2" style={{ color: TEXT }}>解锁完整功能</h3>
-              </div>
-
-              <div className="text-center mb-6 text-sm" style={{ color: '#6B5F50' }}>
-                <div className="text-left space-y-2">
-                  <p>• 最多达20轮深度对话评估</p>
-                  <p>• 个性化深度分析报告</p>
-                  <p>• 详细改进建议和行动方案</p>
-                </div>
-              </div>
-
-              <div className="flex justify-center gap-2">
-                <button
-                  onClick={handlePayWithPayPal}
-                  className="px-4 py-2 rounded font-bold text-white transition-all hover:brightness-95"
-                  style={{ background: '#FF6B00' }}
-                >
-                  支付 $5
-                </button>
-                <button
-                  onClick={() => {
-                    setPaid(true);
-                    setHasUsedComplete(false);
-                    setShowVersionSelector(false);
-                  }}
-                  className="px-4 py-2 rounded font-medium text-white transition-all hover:brightness-95"
-                  style={{ background: '#4CAF50' }}
-                >
-                  已完成支付
-                </button>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setShowVersionSelector(false)}
-              className="w-full py-4 rounded-lg font-medium transition-all border"
-              style={{ borderColor: BORDER, color: TEXT }}
-            >
-              稍后再说
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Main content */}
       {!showDanKoe && (
       <div
@@ -234,13 +85,54 @@ export default function HeroSection({
         }`}
       >
         <div className="w-full max-w-2xl">
+          {/* Version Selector */}
+          <div className="flex justify-center gap-3 mb-6">
+            {(['simple', 'complete'] as const).map((version) => (
+              <button
+                key={version}
+                onClick={() => setSelectedVersion(version)}
+                className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                  selectedVersion === version
+                    ? 'shadow-md'
+                    : 'opacity-70 hover:opacity-100'
+                }`}
+                style={{
+                  background: selectedVersion === version ? '#8C7E6A' : BG_CARD,
+                  color: selectedVersion === version ? '#FFFFFF' : TEXT,
+                  border: `1px solid ${BORDER}`,
+                }}
+              >
+                {VERSION_FEATURES[version].title}
+              </button>
+            ))}
+          </div>
+
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold mb-3 text-center" style={{ color: TEXT }}>
-            {VERSION_FEATURES[selectedVersion].title}
+            Human3.0
           </h1>
           <p className="text-base mb-10 text-center" style={{ color: TEXT_MUTED }}>
             {VERSION_FEATURES[selectedVersion].description}
           </p>
+
+          {/* Version Features */}
+          <div className="flex justify-center mb-8">
+            <div className="flex gap-2">
+              {VERSION_FEATURES[selectedVersion].features.map((feature) => (
+                <span
+                  key={feature}
+                  className="px-3 py-1 rounded-full text-xs"
+                  style={{
+                    background: BG_CARD,
+                    border: `1px solid ${BORDER}`,
+                    color: TEXT_MUTED,
+                  }}
+                >
+                  {feature}
+                </span>
+              ))}
+            </div>
+          </div>
 
           {/* Input */}
           <form onSubmit={handleSubmit} className="mb-8">

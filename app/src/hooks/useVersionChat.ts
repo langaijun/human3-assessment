@@ -13,11 +13,11 @@ interface VersionChatOptions {
 }
 
 export function useVersionChat(options: VersionChatOptions = {}) {
-  const { isPaid } = useAppStore();
+  const { selectedVersion } = useAppStore();
   const [chatEnabled, setChatEnabled] = useState(false);
 
-  const version: 'simple' | 'complete' = isPaid ? 'complete' : 'simple';
-  const systemPrompt = isPaid ? COMPLETE_PROMPT : SIMPLE_PROMPT;
+  const version = selectedVersion as 'simple' | 'complete';
+  const systemPrompt = version === 'complete' ? COMPLETE_PROMPT : SIMPLE_PROMPT;
   const { sendMessage, messages, isLoading, isComplete, result } = useDeepSeekChat({ systemPrompt, version });
 
   const handleStartAssessment = useCallback((input: string) => {
@@ -37,7 +37,7 @@ export function useVersionChat(options: VersionChatOptions = {}) {
     isComplete,
     result,
     chatEnabled,
-    isPaid,
+    version,
     sendMessage,
     handleStartAssessment,
     handleChatComplete,

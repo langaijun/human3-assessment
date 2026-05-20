@@ -25,26 +25,23 @@ export const PAYMENT_STATUSES = {
 export const VERSION_FEATURES = {
   simple: {
     id: 'simple',
-    title: '基础版',
-    description: '免费使用核心功能',
-    price: 0,
+    title: '快速评估',
+    description: '12轮对话，快速了解自己',
     features: [
-      '基本评估',
-      '标准报告',
-      '基础建议'
+      '快速评估',
+      '基础报告',
+      '简单建议'
     ],
     recommended: false
   },
   complete: {
     id: 'complete',
-    title: '完整版',
-    description: '$5 - 获得深度分析',
-    price: 5,
+    title: '深度评估',
+    description: '20轮对话，详细探索成长',
     features: [
       '完整评估',
-      '个性化深度分析',
-      '详细改进建议',
-      '完整版报告'
+      '深度分析',
+      '详细建议'
     ],
     recommended: true
   }

@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Brain, Activity, Heart, Briefcase, RotateCcw, Target } from 'lucide-react';
+import { Brain, Activity, Heart, Briefcase, RotateCcw, Target, ExternalLink } from 'lucide-react';
 import type { AssessmentResult } from '@/types';
 import { PAYMENT } from '@/constants';
-import { useAppStore } from '@/store/useAppStore';
 import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
 
 const BG = '#FDF6E3';
@@ -123,7 +122,6 @@ interface ReportPageProps {
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const { isPaid } = useAppStore();
 
   const dimensionColors = {
     mind: '#8B7EC8',
@@ -316,16 +314,34 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             <RotateCcw className="w-4 h-4" />
             <span>重新测评</span>
           </button>
+        </div>
+      </div>
 
-          {!isPaid && (
+      {/* Sponsorship Card */}
+      <div className="px-6 py-8">
+        <div className="max-w-md mx-auto">
+          <div
+            className="rounded-xl p-6 text-center"
+            style={{ background: '#FAF3E5', border: `1px solid ${BORDER}` }}
+          >
+            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+              <Heart className="w-6 h-6" style={{ color: '#FF9800' }} />
+            </div>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: TEXT }}>
+              赞助支持我们
+            </h3>
+            <p className="text-sm mb-4 leading-relaxed" style={{ color: TEXT_MUTED }}>
+              如果你觉得这个评估对你有帮助，可以考虑赞助支持我们的继续开发。
+            </p>
             <button
               onClick={() => window.open(PAYMENT.PAYPAL_LINK, '_blank')}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all hover:brightness-95"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:brightness-95"
               style={{ background: '#FF9800', color: '#FFFFFF' }}
             >
-              <span>完整版</span>
+              <span>赞助 $5</span>
+              <ExternalLink className="w-4 h-4" />
             </button>
-          )}
+          </div>
         </div>
       </div>
 
