@@ -164,24 +164,6 @@ export default function HeroSection({
             </div>
           </form>
 
-          {/* Example prompts */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {['我感觉被困住了', '我想找到职业方向', '我的人际关系很困扰', '我想提升身体状态'].map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => setInputValue(prompt)}
-                disabled={isTransitioning}
-                className="px-3 py-1.5 rounded-full text-xs transition-all disabled:opacity-50 hover:brightness-95"
-                style={{
-                  background: BG_CARD,
-                  border: `1px solid ${BORDER}`,
-                  color: TEXT_MUTED,
-                }}
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
       )}
