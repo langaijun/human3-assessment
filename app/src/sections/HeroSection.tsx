@@ -83,7 +83,7 @@ export default function HeroSection({
           isTransitioning ? 'opacity-0 scale-[0.98]' : ''
         }`}
       >
-        <div className="w-full max-w-5xl">
+        <div className="w-full max-w-3xl">
           {/* Version Selector */}
           <div className="flex justify-center gap-3 mb-6">
             {(['simple', 'complete'] as const).map((version) => (
