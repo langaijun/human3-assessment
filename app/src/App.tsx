@@ -38,12 +38,6 @@ function App() {
     setPhase('report');
   }, []);
 
-  const handleRestart = useCallback(() => {
-    setPhase('hero');
-    setInitialInput('');
-    setAssessmentResult(null);
-  }, []);
-
   return (
     <div className="relative w-full min-h-screen" style={{ background: BG_COLOR }}>
       <SEOHead phase={phase} />
@@ -71,7 +65,6 @@ function App() {
       {phase === 'report' && assessmentResult && (
         <ReportPage
           result={assessmentResult}
-          onRestart={handleRestart}
         />
       )}
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Brain, Activity, Heart, Briefcase, RotateCcw, Target, ExternalLink } from 'lucide-react';
+import { Brain, Activity, Heart, Briefcase, Target, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { AssessmentResult } from '@/types';
 import { PAYMENT } from '@/constants';
@@ -126,10 +126,9 @@ function QuadrantCard({
 
 interface ReportPageProps {
   result: AssessmentResult;
-  onRestart: () => void;
 }
 
-export default function ReportPage({ result, onRestart }: ReportPageProps) {
+export default function ReportPage({ result }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const { t } = useTranslation();
@@ -318,20 +317,6 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Buttons outside transformation strategy card */}
-      <div className="px-6 pb-4">
-        <div className="max-w-2xl mx-auto flex justify-center gap-3">
-          <button
-            onClick={onRestart}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all hover:brightness-95"
-            style={{ background: '#FFFFFF', color: TEXT, border: `1px solid ${BORDER}` }}
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>{t('report.restart')}</span>
-          </button>
         </div>
       </div>
 
