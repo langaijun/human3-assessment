@@ -1,7 +1,8 @@
 /**
- * Human3.0 框架介绍页面 - 重构版
+ * Human3.0 Framework Introduction Page - Refactored Version
  */
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { introStyles } from '@/styles/introStyles';
 import { spacing, colors } from '@/styles/tokens';
 import { ThreePillars } from '@/components/intro/ThreePillars';
@@ -12,6 +13,8 @@ interface DanKoeIntroProps {
 }
 
 export default function DanKoeIntro({ onClose }: DanKoeIntroProps) {
+  const { t } = useTranslation();
+
   return (
     <div style={introStyles.container}>
       {/* Header with back button */}
@@ -39,10 +42,10 @@ export default function DanKoeIntro({ onClose }: DanKoeIntroProps) {
           {/* Title */}
           <div style={{ textAlign: 'center' as const, marginBottom: `${spacing.xl}px` }}>
             <h1 style={introStyles.title}>
-              思想框架
+              {t('danKoeIntro.title')}
             </h1>
             <p style={introStyles.subtitle}>
-              重塑你的思维模型
+              {t('danKoeIntro.subtitle')}
             </p>
           </div>
 

@@ -1,23 +1,28 @@
 /**
- * HUMAN 3.0 全局状态管理
+ * HUMAN 3.0 Global State Management
  */
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import type { SupportedLanguage } from '@/i18n';
 
 export type AppVersion = 'simple' | 'complete';
 
 interface AppState {
   selectedVersion: AppVersion;
+  language: SupportedLanguage;
   setSelectedVersion: (version: AppVersion) => void;
   toggleVersion: () => void;
+  setLanguage: (language: SupportedLanguage) => void;
 }
 
 interface AppStateState {
   selectedVersion: AppVersion;
+  language: SupportedLanguage;
 }
 
 const initialState: AppStateState = {
   selectedVersion: 'simple',
+  language: 'zh',
 };
 
 export const useAppStore = create<AppState>()(
@@ -28,6 +33,7 @@ export const useAppStore = create<AppState>()(
       toggleVersion: () => set((state) => ({
         selectedVersion: state.selectedVersion === 'simple' ? 'complete' : 'simple',
       })),
+      setLanguage: (language: SupportedLanguage) => set({ language }),
     }),
     {
       name: 'human3-app-store',

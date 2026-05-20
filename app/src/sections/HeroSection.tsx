@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { VERSION_FEATURES } from '@/constants';
+import { useState, useCallback, useEffect } from 'react';
+import { ArrowRight, Languages } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import { useTranslation } from 'react-i18next';
+import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '@/i18n';
 import DanKoeIntro from './DanKoeIntro';
 import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
 
@@ -18,11 +19,17 @@ const TEXT_MUTED = '#8C7E6A';
 export default function HeroSection({
   onStartAssessment,
 }: HeroSectionProps) {
-  const { selectedVersion, setSelectedVersion } = useAppStore();
+  const { selectedVersion, setSelectedVersion, language, setLanguage } = useAppStore();
+  const { t, i18n } = useTranslation();
   const [inputValue, setInputValue] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showDanKoe, setShowDanKoe] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+  // Sync i18n language with store
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +40,19 @@ export default function HeroSection({
       onStartAssessment(inputValue.trim());
     }, 500);
   }, [inputValue, isTransitioning, onStartAssessment]);
+
+  const handleLanguageToggle = useCallback(() => {
+    const currentIndex = SUPPORTED_LANGUAGES.indexOf(language);
+    const nextIndex = (currentIndex + 1) % SUPPORTED_LANGUAGES.length;
+    setLanguage(SUPPORTED_LANGUAGES[nextIndex]);
+  }, [language, setLanguage]);
+
+  // Get features array from translation
+  const features = t(`version.${selectedVersion}.features`, { returnObjects: true }) as string[];
+
+  const placeholder = selectedVersion === 'complete'
+    ? t('hero.placeholderComplete')
+    : t('hero.placeholder');
 
   return (
     <div className="relative w-full min-h-screen flex flex-col" style={{ background: BG }}>
@@ -48,6 +68,21 @@ export default function HeroSection({
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Language Switcher */}
+          <button
+            onClick={handleLanguageToggle}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all hover:scale-105"
+            style={{
+              background: BG_CARD,
+              border: `1px solid ${BORDER}`,
+              color: TEXT_MUTED,
+            }}
+            title={t('common.switchLanguage')}
+          >
+            <Languages className="w-3.5 h-3.5" />
+            <span>{LANGUAGE_NAMES[language]}</span>
+          </button>
+
           <button
             onClick={() => setShowDanKoe(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all hover:scale-105"
@@ -57,7 +92,7 @@ export default function HeroSection({
               color: TEXT_MUTED,
             }}
           >
-            <span>human3.0</span>
+            <span>{t('nav.human3')}</span>
           </button>
         </div>
       </nav>
@@ -101,25 +136,25 @@ export default function HeroSection({
                   border: `1px solid ${BORDER}`,
                 }}
               >
-                {VERSION_FEATURES[version].title}
+                {t(`version.${version}.title`)}
               </button>
             ))}
           </div>
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center" style={{ color: TEXT }}>
-            Human3.0
+            {t('hero.title')}
           </h1>
           <p className="text-base my-8 text-center" style={{ color: TEXT_MUTED }}>
-            {VERSION_FEATURES[selectedVersion].description}
+            {t(`version.${selectedVersion}.description`)}
           </p>
 
           {/* Version Features */}
           <div className="flex justify-center mb-8">
             <div className="flex gap-2">
-              {VERSION_FEATURES[selectedVersion].features.map((feature) => (
+              {Array.isArray(features) && features.map((feature: string, index: number) => (
                 <span
-                  key={feature}
+                  key={index}
                   className="px-3 py-1 rounded-full text-xs"
                   style={{
                     background: BG_CARD,
@@ -140,10 +175,7 @@ export default function HeroSection({
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder={selectedVersion === 'complete'
-                  ? '描述你目前最大的困惑或目标，进行深度分析...'
-                  : '描述你目前最大的困惑或目标...'
-                }
+                placeholder={placeholder}
                 disabled={isTransitioning}
                 className="w-full h-12 pl-4 pr-14 rounded-lg text-sm outline-none transition-all disabled:opacity-50"
                 style={{
@@ -172,17 +204,17 @@ export default function HeroSection({
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-2xl mx-auto text-center space-y-2">
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
-            HUMAN 3.0 Development Model · Multidimensional Potential Assessment
+            {t('footer.subtitle')}
           </p>
           <p
             className="text-xs cursor-pointer hover:underline transition-all"
             style={{ color: '#8C7E6A' }}
             onClick={() => setShowDisclaimer(true)}
           >
-            灵感来源于 Dan Koe 的 Human 3.0 框架
+            {t('footer.disclaimer')}
           </p>
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
-            联系邮箱: <a href="mailto:hello@astraea.blog" className="hover:underline">hello@astraea.blog</a>
+            {t('footer.contact')}: <a href="mailto:hello@astraea.blog" className="hover:underline">hello@astraea.blog</a>
           </p>
         </div>
       </footer>

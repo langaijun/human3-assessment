@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, User, Bot, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useVersionChat } from '@/hooks/useVersionChat';
 import type { AssessmentResult } from '@/types';
 
@@ -31,11 +32,12 @@ function formatMessage(content: string): string {
 
 // AI message: plain text on page, no bubble
 function AIMessage({ content }: { content: string }) {
+  const { t } = useTranslation();
   return (
     <div className="py-4 animate-fade-in" style={{ borderBottom: `1px solid ${BORDER}` }}>
       <div className="flex items-center gap-2 mb-2">
         <Bot className="w-4 h-4" style={{ color: TEXT_MUTED }} />
-        <span className="text-xs" style={{ color: TEXT }}>HUMAN 3.0</span>
+        <span className="text-xs" style={{ color: TEXT }}>{t('assessment.aiName')}</span>
       </div>
       <div
         className="text-sm leading-[1.8]"
@@ -48,11 +50,12 @@ function AIMessage({ content }: { content: string }) {
 
 // User message: subtle card, no bubble
 function UserMessage({ content }: { content: string }) {
+  const { t } = useTranslation();
   return (
     <div className="py-4 flex justify-end animate-fade-in" style={{ borderBottom: `1px solid ${BORDER}` }}>
       <div className="max-w-[85%]">
         <div className="flex items-center gap-2 mb-2 justify-end">
-          <span className="text-xs" style={{ color: TEXT }}>你</span>
+          <span className="text-xs" style={{ color: TEXT }}>{t('assessment.userName')}</span>
           <User className="w-4 h-4" style={{ color: TEXT }} />
         </div>
         <p className="text-sm leading-[1.8] text-right" style={{ color: TEXT }}>
@@ -69,6 +72,7 @@ interface AssessmentInterfaceProps {
 }
 
 export default function AssessmentInterface({ initialInput, onComplete }: AssessmentInterfaceProps) {
+  const { t } = useTranslation();
   const {
     messages,
     isLoading,
@@ -100,7 +104,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
   }, [messages, isLoading]);
 
   const handleViewResult = useCallback(() => {
-    // 如果没有结果，使用默认结果
+    // Default result fallback
     const finalResult = result || {
       metatypeName: '觉醒的探索者',
       metatypeDescription: '基于我们的对话，你的发展图景已经绘制完成。',
@@ -153,10 +157,10 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
           <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
             <span className="text-xs font-bold" style={{ color: BG }}>H</span>
           </div>
-          <span className="text-sm font-medium" style={{ color: TEXT }}>Human 3.0 测评</span>
+          <span className="text-sm font-medium" style={{ color: TEXT }}>{t('assessment.title')}</span>
         </div>
         <div className="text-xs" style={{ color: TEXT_MUTED }}>
-          {assistantCount} 轮对话
+          {assistantCount} {t('assessment.conversationCount')}
         </div>
       </div>
 
@@ -176,13 +180,13 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
         {!isLoading && !isComplete && messages.length === 0 && (
           <div className="text-center py-8">
             <p className="text-sm" style={{ color: TEXT_MUTED }}>
-              开始你的测评之旅...
+              {t('assessment.startMessage')}
             </p>
           </div>
         )}
       </div>
 
-      {/* Complete state - 只在 AI 返回完成标记时显示 */}
+      {/* Complete state - Show when AI returns completion marker */}
       {isComplete && (
         <div className="px-6 py-6" style={{ background: '#FAF3E5' }}>
           <div className="max-w-2xl mx-auto">
@@ -192,7 +196,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
                 className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm transition-all hover:brightness-95"
                 style={{ background: '#8C7E6A', color: '#FFFFFF' }}
               >
-                <span>查看四维评估结果</span>
+                <span>{t('assessment.viewResult')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -214,7 +218,7 @@ export default function AssessmentInterface({ initialInput, onComplete }: Assess
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="输入你的回答...（按 Enter 发送，Shift+Enter 换行）"
+                placeholder={t('assessment.inputPlaceholder')}
                 rows={2}
                 disabled={isLoading || isComplete}
                 className="flex-1 bg-transparent text-sm outline-none resize-none leading-relaxed disabled:opacity-50"

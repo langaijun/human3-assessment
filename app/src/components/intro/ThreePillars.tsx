@@ -1,14 +1,34 @@
 /**
- * Dan Koe Intro - 三大支柱组件
+ * Dan Koe Intro - Three Pillars Component
  */
 import { Eye, Target, User } from 'lucide-react';
-import { INTRO_CONTENT } from '@/content/introContent';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, borderRadius, shadows } from '@/styles/tokens';
 
 export function ThreePillars() {
+  const { t } = useTranslation();
+
+  const pillars = [
+    {
+      id: 'vision',
+      title: t('pillars.vision'),
+      description: t('pillars.visionDesc'),
+    },
+    {
+      id: 'clarity',
+      title: t('pillars.clarity'),
+      description: t('pillars.clarityDesc'),
+    },
+    {
+      id: 'identity',
+      title: t('pillars.identity'),
+      description: t('pillars.identityDesc'),
+    },
+  ];
+
   return (
     <div style={{ backgroundColor: colors.background, padding: `${spacing.md}px`, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: `${spacing.md}px`, marginBottom: `${spacing.lg}px` }}>
-      {INTRO_CONTENT.threePillars.map((pillar) => (
+      {pillars.map((pillar) => (
         <div
           key={pillar.id}
           style={{
@@ -48,7 +68,6 @@ export function ThreePillars() {
             {pillar.id === 'identity' && <User style={{ color: colors.text }} className="w-6 h-6" />}
           </div>
           <h3 style={{ fontWeight: '600', fontSize: '1rem', color: colors.text, marginBottom: `${spacing.xs}px` }}>{pillar.title}</h3>
-          <p style={{ fontSize: '0.75rem', color: colors.textMuted, marginBottom: `${spacing.xs}px` }}>{pillar.titleEn}</p>
           <p style={{ fontSize: '0.75rem', lineHeight: '1.4', color: '#6B5F50' }}>{pillar.description}</p>
         </div>
       ))}

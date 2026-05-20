@@ -1,5 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { AssessmentResult, AppPhase } from '@/types';
+import { useAppStore } from '@/store/useAppStore';
+import SEOHead from '@/components/SEOHead';
+import i18n from '@/i18n';
 import HeroSection from '@/sections/HeroSection';
 import AssessmentInterface from '@/sections/AssessmentInterface';
 import MetatypeCanvas from '@/sections/MetatypeCanvas';
@@ -11,6 +14,12 @@ function App() {
   const [phase, setPhase] = useState<AppPhase>('hero');
   const [initialInput, setInitialInput] = useState('');
   const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
+  const { language } = useAppStore();
+
+  // Sync i18n language with store on mount
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   const handleStartAssessment = useCallback((input?: string) => {
     if (input) {
@@ -21,7 +30,7 @@ function App() {
 
   const handleAssessmentComplete = useCallback((result: AssessmentResult) => {
     setAssessmentResult(result);
-    // 直接显示报告，跳过 MetatypeCanvas
+    // Show report directly, skip MetatypeCanvas
     setPhase('report');
   }, []);
 
@@ -37,6 +46,8 @@ function App() {
 
   return (
     <div className="relative w-full min-h-screen" style={{ background: BG_COLOR }}>
+      <SEOHead phase={phase} />
+
       {phase === 'hero' && (
         <HeroSection
           onStartAssessment={handleStartAssessment}

@@ -1,21 +1,30 @@
 /**
- * Dan Koe Intro - 四维度评估组件
+ * Dan Koe Intro - Four Dimension Assessment Component
  */
 import { CheckCircle, Brain, Activity, Heart } from 'lucide-react';
-import { INTRO_CONTENT } from '@/content/introContent';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, borderRadius } from '@/styles/tokens';
 
 export function DimensionSection() {
+  const { t } = useTranslation();
+
+  const items = [
+    { icon: 'Mind', label: `${t('dimensions.mind')} - ${t('dimensions.mindEn')}` },
+    { icon: 'Body', label: `${t('dimensions.body')} - ${t('dimensions.bodyEn')}` },
+    { icon: 'Target', label: `${t('dimensions.spirit')} - ${t('dimensions.spiritEn')}` },
+    { icon: 'CheckCircle', label: `${t('dimensions.vocation')} - ${t('dimensions.vocationEn')}` },
+  ];
+
   return (
     <div style={{ padding: `${spacing.lg}px`, borderRadius: `${borderRadius.lg}px`, backgroundColor: colors.backgroundLight, border: `1px solid ${colors.border}` }}>
       <h2 style={{ fontSize: '1.125rem', fontWeight: '600', color: colors.text, marginBottom: `${spacing.md}px` }}>
-        {INTRO_CONTENT.dimensions.title}
+        {t('danKoeIntro.framework')}
       </h2>
       <p style={{ fontSize: '0.875rem', lineHeight: '1.5', color: '#6B5F50', marginBottom: `${spacing.lg}px` }}>
-        {INTRO_CONTENT.dimensions.description}
+        {t('danKoeIntro.frameworkDescription')}
       </p>
       <ul style={{ listStyle: 'none', marginLeft: 0, display: 'flex', flexDirection: 'column', gap: `${spacing.md}px` }}>
-        {INTRO_CONTENT.dimensions.items.map((item, index) => (
+        {items.map((item, index) => (
           <li key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: `${spacing.sm}px` }}>
             <div
               style={{

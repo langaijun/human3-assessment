@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Brain, Activity, Heart, Briefcase, RotateCcw, Target, ExternalLink } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { AssessmentResult } from '@/types';
 import { PAYMENT } from '@/constants';
 import DanKoeDisclaimer from '@/components/DanKoeDisclaimer';
@@ -37,6 +38,7 @@ function QuadrantCard({
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -54,8 +56,16 @@ function QuadrantCard({
     return () => observer.disconnect();
   }, []);
 
-  const levelNames = ['1.0 遵从者', '2.0 独立者', '3.0 综合者'];
-  const phaseNames = ['.1 失调期', '.2 不确定期', '.3 发现期'];
+  const levelNames = [
+    t('levels.conformist'),
+    t('levels.individualist'),
+    t('levels.synthesist'),
+  ];
+  const phaseNames = [
+    t('phases.dissonance'),
+    t('phases.uncertainty'),
+    t('phases.discovery'),
+  ];
 
   return (
     <div
@@ -122,6 +132,7 @@ interface ReportPageProps {
 export default function ReportPage({ result, onRestart }: ReportPageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const { t } = useTranslation();
 
   const dimensionColors = {
     mind: '#8B7EC8',
@@ -137,6 +148,13 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
     vocation: '/images/vocation-dimension.jpg',
   };
 
+  const dimensionLabels = {
+    mind: `${t('dimensions.mind')} / ${t('dimensions.mindEn')}`,
+    body: `${t('dimensions.body')} / ${t('dimensions.bodyEn')}`,
+    spirit: `${t('dimensions.spirit')} / ${t('dimensions.spiritEn')}`,
+    vocation: `${t('dimensions.vocation')} / ${t('dimensions.vocationEn')}`,
+  };
+
   return (
     <div ref={containerRef} className="relative w-full min-h-screen" style={{ background: BG }}>
       {/* Hero section */}
@@ -146,7 +164,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             className="text-3xl md:text-4xl font-bold mb-2 text-center"
             style={{ color: TEXT }}
           >
-            你的评估结果
+            {t('report.title')}
           </h1>
 
           <p className="text-center text-base mb-8" style={{ color: TEXT_MUTED }}>
@@ -159,12 +177,12 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
       <div className="px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: TEXT }}>
-            四维评估结果
+            {t('report.dimensionsTitle')}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             <QuadrantCard
-              title="心智维度"
+              title={t('dimensions.mind')}
               icon={Brain}
               level={result.quadrantAnalysis.mind.level}
               phase={result.quadrantAnalysis.mind.phase}
@@ -174,7 +192,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               image={dimensionImages.mind}
             />
             <QuadrantCard
-              title="身体维度"
+              title={t('dimensions.body')}
               icon={Activity}
               level={result.quadrantAnalysis.body.level}
               phase={result.quadrantAnalysis.body.phase}
@@ -184,7 +202,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               image={dimensionImages.body}
             />
             <QuadrantCard
-              title="灵性维度"
+              title={t('dimensions.spirit')}
               icon={Heart}
               level={result.quadrantAnalysis.spirit.level}
               phase={result.quadrantAnalysis.spirit.phase}
@@ -194,7 +212,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               image={dimensionImages.spirit}
             />
             <QuadrantCard
-              title="职业维度"
+              title={t('dimensions.vocation')}
               icon={Briefcase}
               level={result.quadrantAnalysis.vocation.level}
               phase={result.quadrantAnalysis.vocation.phase}
@@ -207,10 +225,10 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
 
           {/* Score bars */}
           <div className="max-w-md mx-auto mb-10">
-            <ScoreBar label="心智 Mind" score={result.dimensionScores.mind} color={dimensionColors.mind} />
-            <ScoreBar label="身体 Body" score={result.dimensionScores.body} color={dimensionColors.body} />
-            <ScoreBar label="灵性 Spirit" score={result.dimensionScores.spirit} color={dimensionColors.spirit} />
-            <ScoreBar label="职业 Vocation" score={result.dimensionScores.vocation} color={dimensionColors.vocation} />
+            <ScoreBar label={dimensionLabels.mind} score={result.dimensionScores.mind} color={dimensionColors.mind} />
+            <ScoreBar label={dimensionLabels.body} score={result.dimensionScores.body} color={dimensionColors.body} />
+            <ScoreBar label={dimensionLabels.spirit} score={result.dimensionScores.spirit} color={dimensionColors.spirit} />
+            <ScoreBar label={dimensionLabels.vocation} score={result.dimensionScores.vocation} color={dimensionColors.vocation} />
           </div>
         </div>
       </div>
@@ -221,7 +239,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
           <div className="flex items-center gap-2 mb-8">
             <Target className="w-5 h-5" style={{ color: TEXT }} />
             <h2 className="text-2xl font-semibold" style={{ color: TEXT }}>
-              转型策略
+              {t('report.transformationStrategy')}
             </h2>
           </div>
 
@@ -231,7 +249,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                 <Target className="w-4 h-4 text-white" />
               </div>
               <p className="text-sm" style={{ color: TEXT }}>
-                核心策略
+                {t('report.coreStrategy')}
               </p>
             </div>
 
@@ -245,7 +263,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                   <span className="text-white text-xs">1</span>
                 </div>
                 <p className="text-sm leading-relaxed">
-                  具体行动计划：基于你当前的能力和发展阶段，提供可执行的改进方案。
+                  {t('report.actionPlan')}
                 </p>
               </div>
 
@@ -254,7 +272,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                   <span className="text-white text-xs">2</span>
                 </div>
                 <p className="text-sm leading-relaxed">
-                  习惯重塑：识别并替换阻碍发展的旧习惯模式，建立支持成长的新行为。
+                  {t('report.habitReshaping')}
                 </p>
               </div>
 
@@ -263,7 +281,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                   <span className="text-white text-xs">3</span>
                 </div>
                 <p className="text-sm leading-relaxed">
-                  系统整合：将四个维度的改进方案整合到你的日常生活中，形成一致的生活方式。
+                  {t('report.systemIntegration')}
                 </p>
               </div>
 
@@ -272,7 +290,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                   <span className="text-white text-xs">4</span>
                 </div>
                 <p className="text-sm leading-relaxed">
-                  持续评估：建立定期自我反思的习惯，使用 HUMAN 3.0 框架追踪你的成长。
+                  {t('report.continuousEvaluation')}
                 </p>
               </div>
             </div>
@@ -282,7 +300,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
                 <Target className="w-4 h-4 text-white" />
               </div>
               <p className="text-sm" style={{ color: TEXT }}>
-                下一步行动
+                {t('report.nextSteps')}
               </p>
             </div>
 
@@ -312,7 +330,7 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
             style={{ background: '#FFFFFF', color: TEXT, border: `1px solid ${BORDER}` }}
           >
             <RotateCcw className="w-4 h-4" />
-            <span>重新测评</span>
+            <span>{t('report.restart')}</span>
           </button>
         </div>
       </div>
@@ -328,14 +346,14 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
               <Heart className="w-6 h-6" style={{ color: '#FF9800' }} />
             </div>
             <p className="text-sm mb-4 leading-relaxed" style={{ color: TEXT_MUTED }}>
-              觉得评估对你有帮助，感谢平台。
+              {t('report.sponsorship')}
             </p>
             <button
               onClick={() => window.open(PAYMENT.PAYPAL_LINK, '_blank')}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:brightness-95"
               style={{ background: '#FF9800', color: '#FFFFFF' }}
             >
-              <span>赞助 $5</span>
+              <span>{t('report.sponsor')}</span>
               <ExternalLink className="w-4 h-4" />
             </button>
           </div>
@@ -346,10 +364,10 @@ export default function ReportPage({ result, onRestart }: ReportPageProps) {
       <footer className="px-6 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-4xl mx-auto text-center space-y-2">
           <p className="text-xs" style={{ color: TEXT_MUTED }}>
-            HUMAN 3.0 Development Model · Multidimensional Potential Assessment
+            {t('footer.subtitle')}
           </p>
           <p className="text-xs cursor-pointer hover:underline transition-all" style={{ color: '#8C7E6A' }} onClick={() => setShowDisclaimer(true)}>
-            灵感来源于 Dan Koe 的 Human 3.0 框架
+            {t('footer.disclaimer')}
           </p>
         </div>
       </footer>
