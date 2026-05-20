@@ -39,7 +39,6 @@ export default function HeroSection({
       {/* Navigation */}
       <nav
         className="flex items-center justify-between px-6 py-4 transition-all duration-500"
-        style={{ borderBottom: `1px solid ${BORDER}` }}
       >
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: TEXT }}>
@@ -84,7 +83,7 @@ export default function HeroSection({
           isTransitioning ? 'opacity-0 scale-[0.98]' : ''
         }`}
       >
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-5xl">
           {/* Version Selector */}
           <div className="flex justify-center gap-3 mb-6">
             {(['simple', 'complete'] as const).map((version) => (
