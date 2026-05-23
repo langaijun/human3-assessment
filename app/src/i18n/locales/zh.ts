@@ -41,6 +41,7 @@ const zh = {
     startMessage: '开始你的测评之旅...',
     inputPlaceholder: '输入你的回答...（按 Enter 发送，Shift+Enter 换行）',
     viewResult: '查看四维评估结果',
+    skipToResult: '直接查看报告',
     aiName: 'HUMAN 3.0',
     userName: '你',
     nextDimension: '接下来我们进入{{dimension}}维度。',

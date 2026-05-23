@@ -321,7 +321,7 @@ export default function ReportPage({ result }: ReportPageProps) {
       </div>
 
       {/* Sponsorship Card */}
-      <div className="px-6 py-8">
+      <div className="px-6 py-2">
         <div className="max-w-md mx-auto">
           <div
             className="rounded-xl p-6 text-center"

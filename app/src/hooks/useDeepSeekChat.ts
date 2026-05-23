@@ -164,8 +164,21 @@ export function useDeepSeekChat(options: DeepSeekChatOptions = {}) {
         }
       }
 
-      const isComplete = assistantContent.includes('[ASSESSMENT_COMPLETE]');
-      const cleanContent = assistantContent.replace('[ASSESSMENT_COMPLETE]', '');
+      // Multiple completion detection patterns
+      const completionPatterns = [
+        '[ASSESSMENT_COMPLETE]',
+        '评估完成',
+        '评估已完成',
+        'assessment complete',
+        'assessment is complete',
+      ];
+      const isComplete = completionPatterns.some(pattern =>
+        assistantContent.toLowerCase().includes(pattern.toLowerCase())
+      );
+      let cleanContent = assistantContent;
+      for (const pattern of completionPatterns) {
+        cleanContent = cleanContent.replace(new RegExp(pattern, 'gi'), '');
+      }
       const result = isComplete ? (parseAssessmentResult(assistantContent) || generateDefaultResult(state.messages, language)) : null;
 
       setState(prev => ({
@@ -218,8 +231,21 @@ async function simulateResponse(
     await new Promise(r => setTimeout(r, 15 + Math.random() * 20));
   }
 
-  const isComplete = response.includes('[ASSESSMENT_COMPLETE]');
-  const cleanContent = response.replace('[ASSESSMENT_COMPLETE]', '');
+  // Multiple completion detection patterns
+  const completionPatterns = [
+    '[ASSESSMENT_COMPLETE]',
+    '评估完成',
+    '评估已完成',
+    'assessment complete',
+    'assessment is complete',
+  ];
+  const isComplete = completionPatterns.some(pattern =>
+    response.toLowerCase().includes(pattern.toLowerCase())
+  );
+  let cleanContent = response;
+  for (const pattern of completionPatterns) {
+    cleanContent = cleanContent.replace(new RegExp(pattern, 'gi'), '');
+  }
   const result = isComplete ? generateDefaultResult([], language) : null;
 
   setState(prev => ({

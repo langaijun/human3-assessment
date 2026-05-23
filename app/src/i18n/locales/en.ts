@@ -41,6 +41,7 @@ const en = {
     startMessage: 'Start your assessment journey...',
     inputPlaceholder: 'Enter your answer... (Enter to send, Shift+Enter for new line)',
     viewResult: 'View 4-Dimension Assessment Results',
+    skipToResult: 'Skip to Report',
     aiName: 'HUMAN 3.0',
     userName: 'You',
     nextDimension: 'Now let\'s move to the {{dimension}} dimension.',
